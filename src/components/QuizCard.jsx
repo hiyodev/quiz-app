@@ -6,6 +6,8 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
+import BasicModal from "./BasicModal";
+
 function QuizCard(props) {
   const { title, description } = props;
   return (
@@ -24,8 +26,12 @@ function QuizCard(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Edit</Button>
-        <Button size="small">Open</Button>
+        <BasicModal
+          buttonText={"Edit"}
+          modalTitle={title}
+          modalDescription={description}
+        />
+        <Button>Open</Button>
       </CardActions>
     </Card>
   );
