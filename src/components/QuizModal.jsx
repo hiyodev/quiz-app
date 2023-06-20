@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import { Grid, Stack, Typography } from "@mui/material";
-import { useState, useContext, useRef } from "react";
+import { useState, useContext } from "react";
 
 import { QuizContext } from "../App";
 
@@ -31,31 +31,59 @@ export default function QuizModal(props) {
   const handleClose = () => setOpen(false);
 
   const { quizArray, setQuizArray } = useContext(QuizContext);
-  const { id, buttonText, imgUrl, imgAlt, title, description } = props;
+  const {
+    id,
+    btnVariant,
+    btnText,
+    imgUrl,
+    imgAlt,
+    modalTitle,
+    title,
+    description,
+  } = props;
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
 
     const inputTitle = data.get("title-field");
-    const inputDescription = data.get("description-field");
     const imageUrl = data.get("imgurl-field");
     const imageAlt = data.get("imgalt-field");
+    const inputDescription = data.get("description-field");
 
     setQuizArray((quizArray) => {
-      return quizArray.map((currQuiz) => {
-        if (currQuiz.id === id) {
-          return {
-            ...currQuiz,
+      if (btnText === "Edit")
+        return quizArray.map((currQuiz) => {
+          if (currQuiz.id === id) {
+            return {
+              ...currQuiz,
+              imgUrl: imageUrl,
+              imgAlt: imageAlt,
+              title: inputTitle,
+              description: inputDescription,
+            };
+          }
+
+          return currQuiz;
+        });
+      else if (btnText === "Create Quiz") {
+        let newId = 0;
+
+        if (quizArray.length !== 0) {
+          newId = quizArray[quizArray.length - 1].id + 1;
+        }
+
+        return [
+          ...quizArray,
+          {
+            id: newId,
             imgUrl: imageUrl,
             imgAlt: imageAlt,
             title: inputTitle,
             description: inputDescription,
-          };
-        }
-
-        return currQuiz;
-      });
+          },
+        ];
+      }
     });
 
     handleClose();
@@ -63,7 +91,9 @@ export default function QuizModal(props) {
 
   return (
     <div>
-      <Button onClick={handleOpen}>{buttonText}</Button>
+      <Button onClick={handleOpen} variant={btnVariant}>
+        {btnText}
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -76,7 +106,7 @@ export default function QuizModal(props) {
             sx={{ mb: 4 }}
             gutterBottom
           >
-            {"Editing"}
+            {modalTitle}
             <b> {title} </b>
             {"Quiz"}
           </Typography>

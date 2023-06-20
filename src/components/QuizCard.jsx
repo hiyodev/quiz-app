@@ -12,12 +12,14 @@ function QuizCard(props) {
   const { id, imgUrl, imgAlt, title, description } = props;
   return (
     <Card variant="outlined" sx={{ maxWidth: 250 }}>
-      <CardMedia
-        component="img"
-        sx={{ height: 200, objectFit: "contain" }}
-        image={imgUrl}
-        title={imgAlt}
-      />
+      {imgUrl.length !== 0 && (
+        <CardMedia
+          component="img"
+          sx={{ height: 200, objectFit: "contain" }}
+          image={imgUrl}
+          title={imgAlt}
+        />
+      )}
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}
@@ -29,7 +31,8 @@ function QuizCard(props) {
       <CardActions>
         <QuizModal
           id={id}
-          buttonText={"Edit"}
+          btnText={"Edit"}
+          modalTitle={"Editing"}
           imgUrl={imgUrl}
           imgAlt={imgAlt}
           title={title}

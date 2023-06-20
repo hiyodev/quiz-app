@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 
 import QuizCard from "./components/QuizCard";
+import QuizModal from "./components/QuizModal";
 
 export const QuizContext = createContext(null);
 
@@ -43,9 +44,11 @@ function App() {
   return (
     <QuizContext.Provider value={{ quizArray, setQuizArray }}>
       <CssBaseline />
-      <AppBar position="relative">
+      <AppBar position="relative" sx={{ bgcolor: "white" }}>
         <Toolbar>
-          <Typography variant="h5">QuizApp</Typography>
+          <Typography variant="h5" sx={{ color: "black" }} ml={18}>
+            QuizApp
+          </Typography>
         </Toolbar>
       </AppBar>
 
@@ -54,10 +57,11 @@ function App() {
           <Box mt={2} mb={2}>
             <Grid container spacing={2} justifyContent="center">
               <Grid item>
-                <Button variant="contained">Create Quiz</Button>
-              </Grid>
-              <Grid item>
-                <Button variant="outlined">Edit</Button>
+                <QuizModal
+                  btnText="Create Quiz"
+                  modalTitle="Create"
+                  btnVariant="contained"
+                />
               </Grid>
             </Grid>
           </Box>
