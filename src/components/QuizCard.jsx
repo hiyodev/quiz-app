@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import BasicModal from "./BasicModal";
 
 function QuizCard(props) {
-  const { title, description } = props;
+  const { id, title, description } = props;
   return (
     <Card variant="outlined" sx={{ maxWidth: 250 }}>
       <CardMedia
@@ -27,6 +27,7 @@ function QuizCard(props) {
       </CardContent>
       <CardActions>
         <BasicModal
+          id={id}
           buttonText={"Edit"}
           modalTitle={title}
           modalDescription={description}

@@ -1,10 +1,11 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import { Grid, Stack } from "@mui/material";
+import { useState, useContext } from "react";
+
+import { QuizContext } from "../App";
 
 const style = {
   position: "absolute",
@@ -19,10 +20,33 @@ const style = {
 };
 
 export default function BasicModal(props) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { buttonText, modalTitle, modalDescription } = props;
+
+  const { quizArray, setQuizArray } = useContext(QuizContext);
+  const { id, buttonText, modalTitle, modalDescription } = props;
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+
+    setQuizArray((quizArray) => {
+      return quizArray.map((currQuiz) => {
+        if (currQuiz.id === id) {
+          return {
+            ...currQuiz,
+            title: data.get("title-field"),
+            description: data.get("description-field"),
+          };
+        }
+
+        return currQuiz;
+      });
+    });
+
+    handleClose();
+  };
 
   return (
     <div>
@@ -33,11 +57,12 @@ export default function BasicModal(props) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box component="form" sx={style} onSubmit={() => console.log("HI")}>
+        <Box component="form" sx={style} onSubmit={onSubmitHandler}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                id="outlined-basic"
+                id="title-field"
+                name="title-field"
                 label="Title"
                 variant="outlined"
                 defaultValue={modalTitle}
@@ -48,7 +73,8 @@ export default function BasicModal(props) {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                id="outlined-multiline-static"
+                id="description-field"
+                name="description-field"
                 label="Description"
                 required
                 multiline
