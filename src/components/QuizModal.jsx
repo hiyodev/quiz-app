@@ -2,8 +2,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import { Grid, Stack } from "@mui/material";
-import { useState, useContext } from "react";
+import { Grid, Stack, Typography } from "@mui/material";
+import { useState, useContext, useRef } from "react";
 
 import { QuizContext } from "../App";
 
@@ -12,32 +12,45 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 600,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
 
-export default function BasicModal(props) {
+// NOTE: Use this only for
+// 1. Creating quizzes
+// 2. Editing Quizzes
+// 3. Opening Quizzes
+
+export default function QuizModal(props) {
   const [open, setOpen] = useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const { quizArray, setQuizArray } = useContext(QuizContext);
-  const { id, buttonText, modalTitle, modalDescription } = props;
+  const { id, buttonText, imgUrl, imgAlt, title, description } = props;
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
+
+    const inputTitle = data.get("title-field");
+    const inputDescription = data.get("description-field");
+    const imageUrl = data.get("imgurl-field");
+    const imageAlt = data.get("imgalt-field");
 
     setQuizArray((quizArray) => {
       return quizArray.map((currQuiz) => {
         if (currQuiz.id === id) {
           return {
             ...currQuiz,
-            title: data.get("title-field"),
-            description: data.get("description-field"),
+            imgUrl: imageUrl,
+            imgAlt: imageAlt,
+            title: inputTitle,
+            description: inputDescription,
           };
         }
 
@@ -55,9 +68,18 @@ export default function BasicModal(props) {
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
       >
         <Box component="form" sx={style} onSubmit={onSubmitHandler}>
+          <Typography
+            id="modal-modal-title"
+            variant="h5"
+            sx={{ mb: 4 }}
+            gutterBottom
+          >
+            {"Editing"}
+            <b> {title} </b>
+            {"Quiz"}
+          </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -65,7 +87,7 @@ export default function BasicModal(props) {
                 name="title-field"
                 label="Title"
                 variant="outlined"
-                defaultValue={modalTitle}
+                defaultValue={title}
                 sx={{ width: 300 }}
                 inputProps={{ maxLength: 30 }}
                 required
@@ -73,14 +95,32 @@ export default function BasicModal(props) {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                id="imgurl-field"
+                name="imgurl-field"
+                label="Image URL"
+                variant="outlined"
+                defaultValue={imgUrl}
+                sx={{ width: 370 }}
+              />{" "}
+              <TextField
+                id="imgalt-field"
+                name="imgalt-field"
+                label="Image Alt"
+                variant="outlined"
+                defaultValue={imgAlt}
+                sx={{ width: 155 }}
+                inputProps={{ maxLength: 14 }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
                 id="description-field"
                 name="description-field"
                 label="Description"
-                required
                 multiline
                 rows={3}
-                defaultValue={modalDescription}
-                sx={{ width: 300 }}
+                defaultValue={description}
+                fullWidth
               />
             </Grid>
           </Grid>

@@ -6,16 +6,17 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-import BasicModal from "./BasicModal";
+import QuizModal from "./QuizModal";
 
 function QuizCard(props) {
-  const { id, title, description } = props;
+  const { id, imgUrl, imgAlt, title, description } = props;
   return (
     <Card variant="outlined" sx={{ maxWidth: 250 }}>
       <CardMedia
-        sx={{ height: 140 }}
-        image="/static/images/cards/contemplative-reptile.jpg"
-        title="green iguana"
+        component="img"
+        sx={{ height: 200, objectFit: "contain" }}
+        image={imgUrl}
+        title={imgAlt}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
@@ -26,11 +27,13 @@ function QuizCard(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <BasicModal
+        <QuizModal
           id={id}
           buttonText={"Edit"}
-          modalTitle={title}
-          modalDescription={description}
+          imgUrl={imgUrl}
+          imgAlt={imgAlt}
+          title={title}
+          description={description}
         />
         <Button>Open</Button>
       </CardActions>

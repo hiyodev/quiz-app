@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 
 import {
   AppBar,
@@ -17,50 +17,22 @@ import QuizCard from "./components/QuizCard";
 export const QuizContext = createContext(null);
 
 function App() {
-  const [quizArray, setQuizArray] = useState([
-    {
-      id: 1,
-      title: "JavaScript 101",
-      description:
-        "Test your JavaScript skills and add some other text that goes here",
-    },
-    {
-      id: 2,
-      title: "Web Development 101",
-      description:
-        "Test your Web Dev skills and add some other text that goes here",
-    },
-    {
-      id: 3,
-      title: "React Knowledge Check",
-      description:
-        "Test your React skills and add some other text that goes here",
-    },
-    {
-      id: 4,
-      title: "JavaScript 101",
-      description:
-        "Test your JavaScript skills and add some other text that goes here",
-    },
-    {
-      id: 5,
-      title: "Web Development 101",
-      description:
-        "Test your Web Dev skills and add some other text that goes here",
-    },
-    {
-      id: 6,
-      title: "React Knowledge Check",
-      description:
-        "Test your React skills and add some other text that goes here",
-    },
-  ]);
+  const [quizArray, setQuizArray] = useState(
+    JSON.parse(localStorage.getItem("quizData"))
+  );
+
+  useEffect(() => {
+    console.log("Saving to localStorage");
+    localStorage.setItem("quizData", JSON.stringify(quizArray));
+  }, [quizArray]);
 
   const quizCards = quizArray.map((quiz) => {
     return (
       <Grid item key={quiz.id}>
         <QuizCard
           id={quiz.id}
+          imgUrl={quiz.imgUrl}
+          imgAlt={quiz.imgAlt}
           title={quiz.title}
           description={quiz.description}
         ></QuizCard>
