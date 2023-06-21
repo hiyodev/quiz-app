@@ -4,7 +4,6 @@ import { useState, createContext, useEffect } from "react";
 import {
   AppBar,
   Typography,
-  Button,
   Container,
   CssBaseline,
   Toolbar,
@@ -19,7 +18,7 @@ export const QuizContext = createContext(null);
 
 function App() {
   const [quizArray, setQuizArray] = useState(
-    JSON.parse(localStorage.getItem("quizData"))
+    JSON.parse(localStorage.getItem("quizData")) || []
   );
 
   useEffect(() => {

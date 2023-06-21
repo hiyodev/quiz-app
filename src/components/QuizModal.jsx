@@ -2,9 +2,12 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import { Grid, Stack, Typography } from "@mui/material";
-import { useState, useContext } from "react";
+import { Grid, Stack, Tab, Tabs, Typography } from "@mui/material";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 
+import { useState, useContext } from "react";
 import { QuizContext } from "../App";
 
 const style = {
@@ -27,10 +30,19 @@ const style = {
 export default function QuizModal(props) {
   const [open, setOpen] = useState(false);
 
+  // For tabs
+  const [value, setValue] = useState("1");
+  const [questions, setQuestions] = useState([
+    { id: 1, question: "What's your name?", answer: "hiyoshi" },
+  ]);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
-  const { quizArray, setQuizArray } = useContext(QuizContext);
+  const { setQuizArray } = useContext(QuizContext);
   const {
     id,
     btnVariant,
@@ -41,6 +53,27 @@ export default function QuizModal(props) {
     title,
     description,
   } = props;
+
+  const qnTabs = questions.map((currQn) => {
+    return (
+      <Tab
+        key={currQn.id}
+        label={`Qn ${currQn.id}`}
+        value={currQn.id.toString()}
+      />
+    );
+  });
+
+  const addQuestionHandler = () => {
+    let newId = 0;
+
+    if (questions.length !== 0) {
+      newId = questions[questions.length - 1].id + 1;
+    }
+
+    setQuestions([...questions, { id: newId, question: "", answer: "" }]);
+    setValue(newId.toString());
+  };
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -154,7 +187,32 @@ export default function QuizModal(props) {
               />
             </Grid>
           </Grid>
-          <Stack spacing={2} direction="row" mt>
+          <Box sx={{ width: "100%", typography: "body1" }}>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <Stack spacing={2} direction="row" mt display="flex">
+                  <TabList
+                    onChange={handleChange}
+                    aria-label="lab API tabs example"
+                    variant="scrollable"
+                  >
+                    {qnTabs}
+                  </TabList>
+                  <Button onClick={addQuestionHandler}>Add</Button>
+                </Stack>
+              </Box>
+              <TabPanel value="1">Item One</TabPanel>
+              <TabPanel value="2">Item Two</TabPanel>
+              <TabPanel value="3">Item Three</TabPanel>
+            </TabContext>
+          </Box>
+          <Stack
+            spacing={2}
+            direction="row"
+            mt={4}
+            display="flex"
+            justifyContent="space-between"
+          >
             <Button variant="outlined" onClick={handleClose}>
               Cancel
             </Button>
