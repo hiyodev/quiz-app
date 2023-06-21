@@ -2,10 +2,15 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import { Grid, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Grid, Stack, Tab, Typography } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
 
 import { useState, useContext } from "react";
 import { QuizContext } from "../App";
@@ -28,21 +33,24 @@ const style = {
 // 3. Opening Quizzes
 
 export default function QuizModal(props) {
+  const { quizArray, setQuizArray } = useContext(QuizContext);
   const [open, setOpen] = useState(false);
 
-  // For tabs
+  // For tab-switching
   const [value, setValue] = useState("1");
-  const [questions, setQuestions] = useState([
-    { id: 1, question: "What's your name?", answer: "hiyoshi" },
+
+  // Temporary store question data
+  const [qnFormData, setQnFormData] = useState([
+    { id: 1, question: "", explanation: "", answerType: "", correctAnswer: "" },
   ]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleChange = (event, newValue) => {
+    console.log(qnFormData);
     setValue(newValue);
   };
 
-  const { setQuizArray } = useContext(QuizContext);
   const {
     id,
     btnVariant,
@@ -54,7 +62,7 @@ export default function QuizModal(props) {
     description,
   } = props;
 
-  const qnTabs = questions.map((currQn) => {
+  const qnTabs = qnFormData.map((currQn) => {
     return (
       <Tab
         key={currQn.id}
@@ -64,33 +72,72 @@ export default function QuizModal(props) {
     );
   });
 
+  const onQnFormDataChange = (key, index, value) => {
+    setQnFormData((prevData) => {
+      prevData[index][key] = value;
+      return prevData;
+    });
+  };
+
   // TODO: Each question form needs to be saved in a temporary storage when user changes tab
   // However, only when user clicks "SAVE" button then we actually save the questions from temp storage to user storage
-  const qnTabPanels = questions.map((currQn) => {
+  const qnTabPanels = qnFormData.map((currQn, index) => {
     return (
       <TabPanel value={currQn.id.toString()} key={currQn.id}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
-              id="title-field"
-              name="title-field"
-              label="Question"
+              id="qns-field"
+              name="qns-field"
+              label="Question Title"
               variant="standard"
-              sx={{ width: 300 }}
-              inputProps={{ maxLength: 30 }}
               autoComplete="off"
+              defaultValue={currQn.question}
+              onChange={(e) =>
+                onQnFormDataChange("question", index, e.target.value)
+              }
               required
+              fullWidth
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
-              id="description-field"
-              name="description-field"
-              label="Answer Explanation"
+              id="qns-explanation-field"
+              name="qns-explanation-field"
+              label="Additional Question Explanation / Examples / Hints goes here..."
+              defaultValue={currQn.explanation}
+              onChange={(e) =>
+                onQnFormDataChange("explanation", index, e.target.value)
+              }
               multiline
               rows={3}
               fullWidth
             />
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl required sx={{ minWidth: 150 }}>
+              <InputLabel id="demo-simple-select-required-label">
+                Answer Type
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-required-label"
+                id="demo-simple-select-required"
+                defaultValue={currQn.answerType}
+                label="Answer Type *"
+                onChange={(e) =>
+                  onQnFormDataChange("answerType", index, e.target.value)
+                }
+              >
+                <MenuItem value={"checkbox"}>
+                  Checkbox (Multiple Answers)
+                </MenuItem>
+                <MenuItem value={"text"}>Text (Keyword Matching)</MenuItem>
+                <MenuItem value={"radio"}>Radio (Single Answers)</MenuItem>
+              </Select>
+              <FormHelperText>
+                Pick a type and additional fields will appear
+              </FormHelperText>
+            </FormControl>
           </Grid>
         </Grid>
       </TabPanel>
@@ -100,11 +147,20 @@ export default function QuizModal(props) {
   const addQuestionHandler = () => {
     let newId = 0;
 
-    if (questions.length !== 0) {
-      newId = questions[questions.length - 1].id + 1;
+    if (qnFormData.length !== 0) {
+      newId = qnFormData[qnFormData.length - 1].id + 1;
     }
 
-    setQuestions([...questions, { id: newId, question: "", answer: "" }]);
+    setQnFormData([
+      ...qnFormData,
+      {
+        id: newId,
+        question: "",
+        explanation: "",
+        answerType: "",
+        correctAnswer: "",
+      },
+    ]);
     setValue(newId.toString());
   };
 
