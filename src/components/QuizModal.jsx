@@ -64,6 +64,39 @@ export default function QuizModal(props) {
     );
   });
 
+  // TODO: Each question form needs to be saved in a temporary storage when user changes tab
+  // However, only when user clicks "SAVE" button then we actually save the questions from temp storage to user storage
+  const qnTabPanels = questions.map((currQn) => {
+    return (
+      <TabPanel value={currQn.id.toString()} key={currQn.id}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              id="title-field"
+              name="title-field"
+              label="Question"
+              variant="standard"
+              sx={{ width: 300 }}
+              inputProps={{ maxLength: 30 }}
+              autoComplete="off"
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="description-field"
+              name="description-field"
+              label="Answer Explanation"
+              multiline
+              rows={3}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
+      </TabPanel>
+    );
+  });
+
   const addQuestionHandler = () => {
     let newId = 0;
 
@@ -201,9 +234,7 @@ export default function QuizModal(props) {
                   <Button onClick={addQuestionHandler}>Add</Button>
                 </Stack>
               </Box>
-              <TabPanel value="1">Item One</TabPanel>
-              <TabPanel value="2">Item Two</TabPanel>
-              <TabPanel value="3">Item Three</TabPanel>
+              {qnTabPanels}
             </TabContext>
           </Box>
           <Stack
