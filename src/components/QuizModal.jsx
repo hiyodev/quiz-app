@@ -41,7 +41,16 @@ export default function QuizModal(props) {
 
   // Temporary store question data
   const [qnFormData, setQnFormData] = useState([
-    { id: 1, question: "", explanation: "", answerType: "", correctAnswer: "" },
+    {
+      id: 1,
+      question: "",
+      explanation: "",
+      answerType: "text",
+      checkBoxAnswers: [],
+      radioAnswers: [],
+      textAnswers: [],
+      correctAnswer: "",
+    },
   ]);
 
   const handleOpen = () => setOpen(true);
@@ -75,8 +84,10 @@ export default function QuizModal(props) {
   const onQnFormDataChange = (key, index, value) => {
     setQnFormData((prevData) => {
       prevData[index][key] = value;
-      return prevData;
+      return [...prevData];
     });
+
+    console.log("form updated");
   };
 
   // TODO: Each question form needs to be saved in a temporary storage when user changes tab
@@ -92,7 +103,7 @@ export default function QuizModal(props) {
               label="Question Title"
               variant="standard"
               autoComplete="off"
-              defaultValue={currQn.question}
+              value={currQn.question}
               onChange={(e) =>
                 onQnFormDataChange("question", index, e.target.value)
               }
@@ -105,7 +116,7 @@ export default function QuizModal(props) {
               id="qns-explanation-field"
               name="qns-explanation-field"
               label="Additional Question Explanation / Examples / Hints goes here..."
-              defaultValue={currQn.explanation}
+              value={currQn.explanation}
               onChange={(e) =>
                 onQnFormDataChange("explanation", index, e.target.value)
               }
@@ -122,22 +133,40 @@ export default function QuizModal(props) {
               <Select
                 labelId="demo-simple-select-required-label"
                 id="demo-simple-select-required"
-                defaultValue={currQn.answerType}
+                value={currQn.answerType}
                 label="Answer Type *"
                 onChange={(e) =>
                   onQnFormDataChange("answerType", index, e.target.value)
                 }
               >
+                <MenuItem value={"text"}>Text (Keyword Matching)</MenuItem>
+                <MenuItem value={"radio"}>Radio (Single Answer Only)</MenuItem>
                 <MenuItem value={"checkbox"}>
                   Checkbox (Multiple Answers)
                 </MenuItem>
-                <MenuItem value={"text"}>Text (Keyword Matching)</MenuItem>
-                <MenuItem value={"radio"}>Radio (Single Answers)</MenuItem>
               </Select>
               <FormHelperText>
-                Pick a type and additional fields will appear
+                Answer fields depend on the type you chose
               </FormHelperText>
             </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            {" "}
+            {currQn.answerType === "text" && (
+              <TextField
+                id="answer-field"
+                name="answer-field"
+                label="Answer"
+                variant="standard"
+                autoComplete="off"
+                defaultValue={currQn.question}
+                onChange={(e) =>
+                  onQnFormDataChange("question", index, e.target.value)
+                }
+                required
+                fullWidth
+              />
+            )}
           </Grid>
         </Grid>
       </TabPanel>
@@ -239,7 +268,7 @@ export default function QuizModal(props) {
                 name="title-field"
                 label="Title"
                 variant="outlined"
-                defaultValue={title}
+                value={title}
                 sx={{ width: 300 }}
                 inputProps={{ maxLength: 30 }}
                 required
@@ -251,7 +280,7 @@ export default function QuizModal(props) {
                 name="imgurl-field"
                 label="Image URL"
                 variant="outlined"
-                defaultValue={imgUrl}
+                value={imgUrl}
                 sx={{ width: 370 }}
               />{" "}
               <TextField
@@ -259,7 +288,7 @@ export default function QuizModal(props) {
                 name="imgalt-field"
                 label="Image Alt"
                 variant="outlined"
-                defaultValue={imgAlt}
+                value={imgAlt}
                 sx={{ width: 155 }}
                 inputProps={{ maxLength: 14 }}
               />
@@ -271,7 +300,7 @@ export default function QuizModal(props) {
                 label="Description"
                 multiline
                 rows={3}
-                defaultValue={description}
+                value={description}
                 fullWidth
               />
             </Grid>
