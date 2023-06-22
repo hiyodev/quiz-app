@@ -1,12 +1,14 @@
-import { useContext } from "react";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Button,
+  Typography,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import { useContext } from "react";
 import QuizModal from "./QuizModal";
 import { QuizContext } from "../App";
 
@@ -37,8 +39,8 @@ function QuizCard(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button>
-          <DeleteIcon onClick={onDeleteHandler} />
+        <Button onClick={onDeleteHandler}>
+          <DeleteIcon />
         </Button>
         <QuizModal
           id={id}

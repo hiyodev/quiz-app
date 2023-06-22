@@ -1,18 +1,23 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
-import TextField from "@mui/material/TextField";
-import { Grid, Stack, Tab, Typography } from "@mui/material";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
-import FormHelperText from "@mui/material/FormHelperText";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
+import {
+  Grid,
+  Stack,
+  Tab,
+  Typography,
+  IconButton,
+  TextField,
+  Modal,
+  Button,
+  Box,
+  FormHelperText,
+  FormControl,
+  Select,
+  InputLabel,
+  MenuItem,
+} from "@mui/material";
+import { TabList, TabPanel, TabContext } from "@mui/lab";
+import { Clear } from "@mui/icons-material";
 
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { QuizContext } from "../App";
 
 const style = {
@@ -45,7 +50,7 @@ export default function QuizModal(props) {
       id: 1,
       question: "",
       explanation: "",
-      answerType: "text",
+      answerType: "",
       checkBoxAnswers: [],
       radioAnswers: [],
       textAnswers: [],
@@ -58,6 +63,35 @@ export default function QuizModal(props) {
   const handleChange = (event, newValue) => {
     console.log(qnFormData);
     setValue(newValue);
+  };
+
+  const onTabDeleteHandler = (id) => {
+    // Remove the deleted tab and re-index the tabs to maintain ascending order
+    const withoutDeletedTab = qnFormData.filter((currQn) => currQn.id !== id);
+    const updateDataIndices = withoutDeletedTab.map((currQn, index) => ({
+      ...currQn,
+      id: index + 1,
+    }));
+
+    setQnFormData(updateDataIndices);
+
+    const newTabListSize = withoutDeletedTab.length;
+
+    // Handle tab state that depends on index and update accordingly to the new indices
+    if (id > newTabListSize && value == id) {
+      setValue(newTabListSize.toString());
+    } else if (id < value) {
+      setValue((value - 1).toString());
+    }
+  };
+
+  const onQnFormDataChange = (key, index, value) => {
+    setQnFormData((prevData) => {
+      prevData[index][key] = value;
+      return [...prevData];
+    });
+
+    console.log("form updated");
   };
 
   const {
@@ -75,20 +109,26 @@ export default function QuizModal(props) {
     return (
       <Tab
         key={currQn.id}
-        label={`Qn ${currQn.id}`}
+        label={
+          <span>
+            {`Qn ${currQn.id}`}
+            <IconButton
+              size="small"
+              component="span"
+              disabled={qnFormData.length === 1}
+              onClick={(e) => {
+                e.stopPropagation();
+                onTabDeleteHandler(currQn.id);
+              }}
+            >
+              <Clear />
+            </IconButton>
+          </span>
+        }
         value={currQn.id.toString()}
-      />
+      ></Tab>
     );
   });
-
-  const onQnFormDataChange = (key, index, value) => {
-    setQnFormData((prevData) => {
-      prevData[index][key] = value;
-      return [...prevData];
-    });
-
-    console.log("form updated");
-  };
 
   // TODO: Each question form needs to be saved in a temporary storage when user changes tab
   // However, only when user clicks "SAVE" button then we actually save the questions from temp storage to user storage
@@ -151,7 +191,6 @@ export default function QuizModal(props) {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            {" "}
             {currQn.answerType === "text" && (
               <TextField
                 id="answer-field"
@@ -174,11 +213,7 @@ export default function QuizModal(props) {
   });
 
   const addQuestionHandler = () => {
-    let newId = 0;
-
-    if (qnFormData.length !== 0) {
-      newId = qnFormData[qnFormData.length - 1].id + 1;
-    }
+    let newId = qnFormData.length + 1;
 
     setQnFormData([
       ...qnFormData,
@@ -308,11 +343,12 @@ export default function QuizModal(props) {
           <Box sx={{ width: "100%", typography: "body1" }}>
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <Stack spacing={2} direction="row" mt display="flex">
+                <Stack spacing={0} direction="row" mt display="flex">
                   <TabList
                     onChange={handleChange}
                     aria-label="lab API tabs example"
                     variant="scrollable"
+                    scrollButtons
                   >
                     {qnTabs}
                   </TabList>
