@@ -45,7 +45,7 @@ function App() {
       <CssBaseline />
       <AppBar position="relative" sx={{ bgcolor: "white" }}>
         <Toolbar>
-          <Typography variant="h5" sx={{ color: "black" }} ml={18}>
+          <Typography variant="h5" sx={{ color: "black" }}>
             QuizApp
           </Typography>
         </Toolbar>
