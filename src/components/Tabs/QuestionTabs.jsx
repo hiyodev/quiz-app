@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { TabList, TabPanel, TabContext } from "@mui/lab";
 import { Clear } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 
 function QuestionTabs(props) {
@@ -36,14 +37,28 @@ function QuestionTabs(props) {
       answerType: "",
       checkboxAns: [],
       radioAns: [
-        { value: "True", answer: true },
-        { value: "False", answer: true },
+        { value: "True", answer: false },
+        { value: "False", answer: false },
       ],
       textAns: "",
     },
   ]);
 
   const handleTabChange = (event, newValue) => setTabValue(newValue);
+
+  const onAddAnsOptionHandler = (key, index) => {
+    setQnFormData((prevData) => {
+      prevData[index][key].push({ value: "", answer: false });
+      return [...prevData];
+    });
+  };
+
+  const onDelAnsOptionHandler = (key, index, selectIndex) => {
+    setQnFormData((prevData) => {
+      prevData[index][key].splice(selectIndex, 1);
+      return [...prevData];
+    });
+  };
 
   const onAddTabHandler = () => {
     let newId = qnFormData.length + 1;
@@ -93,9 +108,9 @@ function QuestionTabs(props) {
     });
   };
 
-  const onAnswersChangeHandler = (key, index, radioIndex, value) => {
+  const onAnswersChangeHandler = (key, index, selectIndex, value) => {
     setQnFormData((prevData) => {
-      prevData[index][key][radioIndex].value = value;
+      prevData[index][key][selectIndex].value = value;
       return [...prevData];
     });
   };
@@ -190,10 +205,12 @@ function QuestionTabs(props) {
               <FormControl>
                 <RadioGroup
                   value={radioValue}
-                  onChange={(e) => setRadioValue(e.target.value)}
+                  onChange={(e) =>
+                    e.target.value.length !== 0 && setRadioValue(e.target.value)
+                  }
                 >
                   <FormLabel id="demo-controlled-radio-buttons-group">
-                    Select the correct answer
+                    Select the correct answer out of the options
                   </FormLabel>
                   {currQn.radioAns.map((currRadio, radioIndex) => (
                     <FormControlLabel
@@ -201,18 +218,44 @@ function QuestionTabs(props) {
                       value={currRadio.value}
                       control={<Radio />}
                       label={
-                        <TextField
-                          size="small"
-                          defaultValue={currRadio.value}
-                          onChange={(e) =>
-                            onAnswersChangeHandler(
-                              "radioAns",
-                              index,
-                              radioIndex,
-                              e.target.value
-                            )
-                          }
-                        ></TextField>
+                        <>
+                          <TextField
+                            size="small"
+                            defaultValue={currRadio.value}
+                            onChange={(e) =>
+                              onAnswersChangeHandler(
+                                "radioAns",
+                                index,
+                                radioIndex,
+                                e.target.value
+                              )
+                            }
+                          ></TextField>
+                          {radioIndex > 1 && (
+                            <Button
+                              onClick={() =>
+                                onDelAnsOptionHandler(
+                                  "radioAns",
+                                  index,
+                                  radioIndex
+                                )
+                              }
+                              sx={{ marginTop: 0.2 }}
+                            >
+                              <Clear />
+                            </Button>
+                          )}
+                          {radioIndex === currQn.radioAns.length - 1 && (
+                            <Button
+                              onClick={(e) => {
+                                onAddAnsOptionHandler("radioAns", index);
+                              }}
+                              sx={{ marginTop: 0.2 }}
+                            >
+                              <AddIcon />
+                            </Button>
+                          )}
+                        </>
                       }
                     ></FormControlLabel>
                   ))}
@@ -235,6 +278,7 @@ function QuestionTabs(props) {
               />
             )}
           </Grid>
+          <Grid item xs={12}></Grid>
         </Grid>
       </TabPanel>
     );
