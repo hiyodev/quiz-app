@@ -1,24 +1,16 @@
 import {
   Grid,
   Stack,
-  Tab,
   Typography,
-  IconButton,
   TextField,
   Modal,
   Button,
   Box,
-  FormHelperText,
-  FormControl,
-  Select,
-  InputLabel,
-  MenuItem,
 } from "@mui/material";
-import { TabList, TabPanel, TabContext } from "@mui/lab";
-import { Clear } from "@mui/icons-material";
 
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { QuizContext } from "../App";
+import QuestionTabs from "./Tabs/QuestionTabs";
 
 const style = {
   position: "absolute",
@@ -38,62 +30,6 @@ const style = {
 // 3. Opening Quizzes
 
 export default function QuizModal(props) {
-  const { quizArray, setQuizArray } = useContext(QuizContext);
-  const [open, setOpen] = useState(false);
-
-  // For tab-switching
-  const [value, setValue] = useState("1");
-
-  // Temporary store question data
-  const [qnFormData, setQnFormData] = useState([
-    {
-      id: 1,
-      question: "",
-      explanation: "",
-      answerType: "",
-      checkBoxAnswers: [],
-      radioAnswers: [],
-      textAnswers: [],
-      correctAnswer: "",
-    },
-  ]);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const handleChange = (event, newValue) => {
-    console.log(qnFormData);
-    setValue(newValue);
-  };
-
-  const onTabDeleteHandler = (id) => {
-    // Remove the deleted tab and re-index the tabs to maintain ascending order
-    const withoutDeletedTab = qnFormData.filter((currQn) => currQn.id !== id);
-    const updateDataIndices = withoutDeletedTab.map((currQn, index) => ({
-      ...currQn,
-      id: index + 1,
-    }));
-
-    setQnFormData(updateDataIndices);
-
-    const newTabListSize = withoutDeletedTab.length;
-
-    // Handle tab state that depends on index and update accordingly to the new indices
-    if (id > newTabListSize && value == id) {
-      setValue(newTabListSize.toString());
-    } else if (id < value) {
-      setValue((value - 1).toString());
-    }
-  };
-
-  const onQnFormDataChange = (key, index, value) => {
-    setQnFormData((prevData) => {
-      prevData[index][key] = value;
-      return [...prevData];
-    });
-
-    console.log("form updated");
-  };
-
   const {
     id,
     btnVariant,
@@ -105,128 +41,10 @@ export default function QuizModal(props) {
     description,
   } = props;
 
-  const qnTabs = qnFormData.map((currQn) => {
-    return (
-      <Tab
-        key={currQn.id}
-        label={
-          <span>
-            {`Qn ${currQn.id}`}
-            <IconButton
-              size="small"
-              component="span"
-              disabled={qnFormData.length === 1}
-              onClick={(e) => {
-                e.stopPropagation();
-                onTabDeleteHandler(currQn.id);
-              }}
-            >
-              <Clear />
-            </IconButton>
-          </span>
-        }
-        value={currQn.id.toString()}
-      ></Tab>
-    );
-  });
-
-  // TODO: Each question form needs to be saved in a temporary storage when user changes tab
-  // However, only when user clicks "SAVE" button then we actually save the questions from temp storage to user storage
-  const qnTabPanels = qnFormData.map((currQn, index) => {
-    return (
-      <TabPanel value={currQn.id.toString()} key={currQn.id}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              id="qns-field"
-              name="qns-field"
-              label="Question Title"
-              variant="standard"
-              autoComplete="off"
-              value={currQn.question}
-              onChange={(e) =>
-                onQnFormDataChange("question", index, e.target.value)
-              }
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id="qns-explanation-field"
-              name="qns-explanation-field"
-              label="Additional Question Explanation / Examples / Hints goes here..."
-              value={currQn.explanation}
-              onChange={(e) =>
-                onQnFormDataChange("explanation", index, e.target.value)
-              }
-              multiline
-              rows={3}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <FormControl required sx={{ minWidth: 150 }}>
-              <InputLabel id="demo-simple-select-required-label">
-                Answer Type
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-required-label"
-                id="demo-simple-select-required"
-                value={currQn.answerType}
-                label="Answer Type *"
-                onChange={(e) =>
-                  onQnFormDataChange("answerType", index, e.target.value)
-                }
-              >
-                <MenuItem value={"text"}>Text (Keyword Matching)</MenuItem>
-                <MenuItem value={"radio"}>Radio (Single Answer Only)</MenuItem>
-                <MenuItem value={"checkbox"}>
-                  Checkbox (Multiple Answers)
-                </MenuItem>
-              </Select>
-              <FormHelperText>
-                Answer fields depend on the type you chose
-              </FormHelperText>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            {currQn.answerType === "text" && (
-              <TextField
-                id="answer-field"
-                name="answer-field"
-                label="Answer"
-                variant="standard"
-                autoComplete="off"
-                defaultValue={currQn.question}
-                onChange={(e) =>
-                  onQnFormDataChange("question", index, e.target.value)
-                }
-                required
-                fullWidth
-              />
-            )}
-          </Grid>
-        </Grid>
-      </TabPanel>
-    );
-  });
-
-  const addQuestionHandler = () => {
-    let newId = qnFormData.length + 1;
-
-    setQnFormData([
-      ...qnFormData,
-      {
-        id: newId,
-        question: "",
-        explanation: "",
-        answerType: "",
-        correctAnswer: "",
-      },
-    ]);
-    setValue(newId.toString());
-  };
+  const { quizArray, setQuizArray } = useContext(QuizContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleModalOpen = () => setIsModalOpen(true);
+  const handleModalClose = () => setIsModalOpen(false);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -272,17 +90,17 @@ export default function QuizModal(props) {
       }
     });
 
-    handleClose();
+    handleModalClose();
   };
 
   return (
     <div>
-      <Button onClick={handleOpen} variant={btnVariant}>
+      <Button onClick={handleModalOpen} variant={btnVariant}>
         {btnText}
       </Button>
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={isModalOpen}
+        onClose={handleModalClose}
         aria-labelledby="modal-modal-title"
       >
         <Box component="form" sx={style} onSubmit={onSubmitHandler}>
@@ -340,24 +158,7 @@ export default function QuizModal(props) {
               />
             </Grid>
           </Grid>
-          <Box sx={{ width: "100%", typography: "body1" }}>
-            <TabContext value={value}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <Stack spacing={0} direction="row" mt display="flex">
-                  <TabList
-                    onChange={handleChange}
-                    aria-label="lab API tabs example"
-                    variant="scrollable"
-                    scrollButtons
-                  >
-                    {qnTabs}
-                  </TabList>
-                  <Button onClick={addQuestionHandler}>Add</Button>
-                </Stack>
-              </Box>
-              {qnTabPanels}
-            </TabContext>
-          </Box>
+          <QuestionTabs></QuestionTabs>
           <Stack
             spacing={2}
             direction="row"
@@ -365,7 +166,7 @@ export default function QuizModal(props) {
             display="flex"
             justifyContent="space-between"
           >
-            <Button variant="outlined" onClick={handleClose}>
+            <Button variant="outlined" onClick={handleModalClose}>
               Cancel
             </Button>
             <Button variant="contained" type="submit">
