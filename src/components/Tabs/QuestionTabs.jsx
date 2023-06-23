@@ -296,19 +296,46 @@ function QuestionTabs(props) {
                       key={checkboxIndex}
                       control={<Checkbox selected={currCheckbox.selected} />}
                       label={
-                        <TextField
-                          size="small"
-                          autoComplete="off"
-                          value={currCheckbox.value}
-                          onChange={(e) =>
-                            onAnsChangeHandler(
-                              "checkboxAns",
-                              index,
-                              checkboxIndex,
-                              e.target.value
-                            )
-                          }
-                        ></TextField>
+                        <>
+                          <TextField
+                            size="small"
+                            autoComplete="off"
+                            value={currCheckbox.value}
+                            onChange={(e) =>
+                              onAnsChangeHandler(
+                                "checkboxAns",
+                                index,
+                                checkboxIndex,
+                                e.target.value
+                              )
+                            }
+                          />
+                          {checkboxIndex > 0 && (
+                            <Button
+                              onClick={() =>
+                                onDelAnsOptionHandler(
+                                  "checkboxAns",
+                                  index,
+                                  checkboxIndex
+                                )
+                              }
+                              sx={{ marginTop: 0.2 }}
+                            >
+                              <Clear />
+                            </Button>
+                          )}
+                          {checkboxIndex === currQn.checkboxAns.length - 1 && (
+                            <Button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                onAddAnsOptionHandler("checkboxAns", index);
+                              }}
+                              sx={{ marginTop: 0.2 }}
+                            >
+                              <AddIcon />
+                            </Button>
+                          )}
+                        </>
                       }
                     />
                   ))}
