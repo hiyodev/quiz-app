@@ -15,6 +15,8 @@ import {
   RadioGroup,
   FormLabel,
   FormControlLabel,
+  FormGroup,
+  Checkbox,
 } from "@mui/material";
 import { TabList, TabPanel, TabContext } from "@mui/lab";
 import { Clear } from "@mui/icons-material";
@@ -26,7 +28,7 @@ function QuestionTabs(props) {
   const [tabValue, setTabValue] = useState("1");
 
   // For radio-button in Answers
-  const [radioValue, setRadioValue] = useState("");
+  const [radioValue, setRadioValue] = useState("True");
 
   // Store tab data temporarily until user exits out of Modal
   const [qnFormData, setQnFormData] = useState([
@@ -35,7 +37,10 @@ function QuestionTabs(props) {
       question: "",
       explanation: "",
       answerType: "",
-      checkboxAns: [],
+      checkboxAns: [
+        { value: "A", selected: false },
+        { value: "B", selected: false },
+      ],
       radioAns: [
         { value: "True", answer: false },
         { value: "False", answer: false },
@@ -70,10 +75,13 @@ function QuestionTabs(props) {
         question: "",
         explanation: "",
         answerType: "",
-        checkboxAns: [],
+        checkboxAns: [
+          { value: "A", selected: false },
+          { value: "B", selected: false },
+        ],
         radioAns: [
-          { value: "True", answer: true },
-          { value: "False", answer: true },
+          { value: "True", answer: false },
+          { value: "False", answer: false },
         ],
         textAns: "",
       },
@@ -93,7 +101,7 @@ function QuestionTabs(props) {
     const newTabListSize = deletedTabQnData.length;
 
     // Handle tab state that depends on index and update accordingly to the new indices
-    if (id > newTabListSize && tabValue == id) {
+    if (id > newTabListSize && Number(tabValue) === id) {
       setTabValue(newTabListSize.toString());
     } else if (id < tabValue) {
       setTabValue((tabValue - 1).toString());
@@ -101,14 +109,13 @@ function QuestionTabs(props) {
   };
 
   const onTabDataChangeHandler = (key, index, value) => {
-    console.log(index);
     setQnFormData((prevData) => {
       prevData[index][key] = value;
       return [...prevData];
     });
   };
 
-  const onAnswersChangeHandler = (key, index, selectIndex, value) => {
+  const onAnsChangeHandler = (key, index, selectIndex, value) => {
     setQnFormData((prevData) => {
       prevData[index][key][selectIndex].value = value;
       return [...prevData];
@@ -201,6 +208,21 @@ function QuestionTabs(props) {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
+            {currQn.answerType === "text" && (
+              <TextField
+                id="answer-field"
+                name="answer-field"
+                label="Answer"
+                variant="standard"
+                autoComplete="off"
+                defaultValue={currQn.textAns}
+                onChange={(e) =>
+                  onTabDataChangeHandler("textAns", index, e.target.value)
+                }
+                required
+                fullWidth
+              />
+            )}
             {currQn.answerType === "radio" && (
               <FormControl>
                 <RadioGroup
@@ -221,9 +243,9 @@ function QuestionTabs(props) {
                         <>
                           <TextField
                             size="small"
-                            defaultValue={currRadio.value}
+                            value={currRadio.value}
                             onChange={(e) =>
-                              onAnswersChangeHandler(
+                              onAnsChangeHandler(
                                 "radioAns",
                                 index,
                                 radioIndex,
@@ -248,6 +270,7 @@ function QuestionTabs(props) {
                           {radioIndex === currQn.radioAns.length - 1 && (
                             <Button
                               onClick={(e) => {
+                                e.preventDefault();
                                 onAddAnsOptionHandler("radioAns", index);
                               }}
                               sx={{ marginTop: 0.2 }}
@@ -262,20 +285,35 @@ function QuestionTabs(props) {
                 </RadioGroup>
               </FormControl>
             )}
-            {currQn.answerType === "text" && (
-              <TextField
-                id="answer-field"
-                name="answer-field"
-                label="Answer"
-                variant="standard"
-                autoComplete="off"
-                defaultValue={currQn.textAns}
-                onChange={(e) =>
-                  onTabDataChangeHandler("textAns", index, e.target.value)
-                }
-                required
-                fullWidth
-              />
+            {currQn.answerType === "checkbox" && (
+              <>
+                <FormLabel component="legend">
+                  Select one or multiple answers
+                </FormLabel>
+                <FormGroup>
+                  {currQn.checkboxAns.map((currCheckbox, checkboxIndex) => (
+                    <FormControlLabel
+                      key={checkboxIndex}
+                      control={<Checkbox selected={currCheckbox.selected} />}
+                      label={
+                        <TextField
+                          size="small"
+                          autoComplete="off"
+                          value={currCheckbox.value}
+                          onChange={(e) =>
+                            onAnsChangeHandler(
+                              "checkboxAns",
+                              index,
+                              checkboxIndex,
+                              e.target.value
+                            )
+                          }
+                        ></TextField>
+                      }
+                    />
+                  ))}
+                </FormGroup>
+              </>
             )}
           </Grid>
           <Grid item xs={12}></Grid>
