@@ -203,7 +203,14 @@ function QuestionTabs(props) {
                 </MenuItem>
               </Select>
               <FormHelperText>
-                Answer fields depend on the type you chose
+                {currQn.answerType === "" &&
+                  "Answer fields depend on the type you chose"}
+                {currQn.answerType === "radio" &&
+                  "At least one answer must be selected"}
+                {currQn.answerType === "text" &&
+                  "Keywords are NOT case sensitive"}
+                {currQn.answerType === "checkbox" &&
+                  "Points gained or lost per answer can be adjusted"}
               </FormHelperText>
             </FormControl>
           </Grid>
@@ -211,26 +218,28 @@ function QuestionTabs(props) {
             {currQn.answerType === "text" && (
               <>
                 {currQn.textAns.map((currText, textIndex) => (
-                  <Box sx={{ display: "flex" }} key={textIndex}>
-                    <TextField
-                      size="small"
-                      id="keyword-field"
-                      name="keyword-field"
-                      label={`#${textIndex + 1} Keyword`}
-                      variant="outlined"
-                      autoComplete="off"
-                      value={currText.value}
-                      onChange={(e) =>
-                        onAnsChangeHandler(
-                          "textAns",
-                          index,
-                          textIndex,
-                          e.target.value
-                        )
-                      }
-                      required
-                      sx={{ marginTop: 1 }}
-                    />
+                  <Grid container key={textIndex}>
+                    <Grid item>
+                      <TextField
+                        size="small"
+                        id="keyword-field"
+                        name="keyword-field"
+                        label={`#${textIndex + 1} Keyword`}
+                        variant="outlined"
+                        autoComplete="off"
+                        value={currText.value}
+                        onChange={(e) =>
+                          onAnsChangeHandler(
+                            "textAns",
+                            index,
+                            textIndex,
+                            e.target.value
+                          )
+                        }
+                        required
+                        sx={{ margin: 0.5 }}
+                      />
+                    </Grid>
                     {textIndex > 0 && (
                       <Button
                         onClick={() =>
@@ -251,7 +260,7 @@ function QuestionTabs(props) {
                         <AddIcon />
                       </Button>
                     )}
-                  </Box>
+                  </Grid>
                 ))}
               </>
             )}
