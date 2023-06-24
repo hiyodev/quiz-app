@@ -38,20 +38,20 @@ function QuestionTabs(props) {
       explanation: "",
       answerType: "",
       checkboxAns: [
-        { value: "A", selected: false },
-        { value: "B", selected: false },
+        { value: "A", answer: false },
+        { value: "B", answer: false },
       ],
       radioAns: [
         { value: "True", answer: false },
         { value: "False", answer: false },
       ],
-      textAns: "",
+      textAns: [{ value: "", answer: false }],
     },
   ]);
 
   const handleTabChange = (event, newValue) => setTabValue(newValue);
 
-  const onAddAnsOptionHandler = (key, index) => {
+  const onAddAnsOptionHandler = (key, index, text) => {
     setQnFormData((prevData) => {
       prevData[index][key].push({ value: "", answer: false });
       return [...prevData];
@@ -76,14 +76,14 @@ function QuestionTabs(props) {
         explanation: "",
         answerType: "",
         checkboxAns: [
-          { value: "A", selected: false },
-          { value: "B", selected: false },
+          { value: "A", answer: false },
+          { value: "B", answer: false },
         ],
         radioAns: [
           { value: "True", answer: false },
           { value: "False", answer: false },
         ],
-        textAns: "",
+        textAns: [{ value: "", answer: false }],
       },
     ]);
     setTabValue(newId.toString());
@@ -209,19 +209,51 @@ function QuestionTabs(props) {
           </Grid>
           <Grid item xs={12}>
             {currQn.answerType === "text" && (
-              <TextField
-                id="answer-field"
-                name="answer-field"
-                label="Answer"
-                variant="standard"
-                autoComplete="off"
-                defaultValue={currQn.textAns}
-                onChange={(e) =>
-                  onTabDataChangeHandler("textAns", index, e.target.value)
-                }
-                required
-                fullWidth
-              />
+              <>
+                {currQn.textAns.map((currText, textIndex) => (
+                  <Box sx={{ display: "flex" }} key={textIndex}>
+                    <TextField
+                      size="small"
+                      id="keyword-field"
+                      name="keyword-field"
+                      label={`#${textIndex + 1} Keyword`}
+                      variant="outlined"
+                      autoComplete="off"
+                      value={currText.value}
+                      onChange={(e) =>
+                        onAnsChangeHandler(
+                          "textAns",
+                          index,
+                          textIndex,
+                          e.target.value
+                        )
+                      }
+                      required
+                      sx={{ marginTop: 1 }}
+                    />
+                    {textIndex > 0 && (
+                      <Button
+                        onClick={() =>
+                          onDelAnsOptionHandler("textAns", index, textIndex)
+                        }
+                      >
+                        <Clear />
+                      </Button>
+                    )}
+                    {textIndex === currQn.textAns.length - 1 && (
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onAddAnsOptionHandler("textAns", index);
+                        }}
+                        sx={{ marginTop: 0.2 }}
+                      >
+                        <AddIcon />
+                      </Button>
+                    )}
+                  </Box>
+                ))}
+              </>
             )}
             {currQn.answerType === "radio" && (
               <FormControl>
