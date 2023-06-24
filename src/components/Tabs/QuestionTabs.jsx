@@ -266,7 +266,7 @@ function QuestionTabs(props) {
                     <FormControlLabel
                       required
                       sx={{
-                        "& .MuiFormControlLabel-asterisk": {
+                        ".MuiFormControlLabel-asterisk": {
                           visibility: "hidden",
                         },
                       }}
@@ -342,7 +342,7 @@ function QuestionTabs(props) {
                     <FormControlLabel
                       required
                       sx={{
-                        "& .MuiFormControlLabel-asterisk": {
+                        ".MuiFormControlLabel-asterisk": {
                           visibility: "hidden",
                         },
                       }}
