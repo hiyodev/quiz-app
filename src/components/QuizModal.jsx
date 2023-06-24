@@ -42,6 +42,28 @@ export default function QuizModal(props) {
   } = props;
 
   const { quizArray, setQuizArray } = useContext(QuizContext);
+
+  // Store tab data temporarily until user exits out of Modal
+  const [qnFormData, setQnFormData] = useState(
+    quizArray[id]?.tabs || [
+      {
+        id: 1,
+        question: "",
+        explanation: "",
+        answerType: "",
+        checkboxAns: [
+          { value: "A", answer: false },
+          { value: "B", answer: false },
+        ],
+        radioAns: [
+          { value: "True", answer: false },
+          { value: "False", answer: false },
+        ],
+        textAns: [{ value: "", answer: false }],
+      },
+    ]
+  );
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
@@ -65,6 +87,7 @@ export default function QuizModal(props) {
               imgAlt: imageAlt,
               title: inputTitle,
               description: inputDescription,
+              tabs: qnFormData,
             };
           }
 
@@ -85,6 +108,7 @@ export default function QuizModal(props) {
             imgAlt: imageAlt,
             title: inputTitle,
             description: inputDescription,
+            tabs: qnFormData,
           },
         ];
       }
@@ -121,7 +145,7 @@ export default function QuizModal(props) {
                 name="title-field"
                 label="Title"
                 variant="outlined"
-                value={title}
+                defaultValue={title}
                 sx={{ width: 300 }}
                 inputProps={{ maxLength: 30 }}
                 required
@@ -133,7 +157,7 @@ export default function QuizModal(props) {
                 name="imgurl-field"
                 label="Image URL"
                 variant="outlined"
-                value={imgUrl}
+                defaultValue={imgUrl}
                 sx={{ width: 370 }}
               />{" "}
               <TextField
@@ -141,7 +165,7 @@ export default function QuizModal(props) {
                 name="imgalt-field"
                 label="Image Alt"
                 variant="outlined"
-                value={imgAlt}
+                defaultValue={imgAlt}
                 sx={{ width: 155 }}
                 inputProps={{ maxLength: 14 }}
               />
@@ -153,12 +177,15 @@ export default function QuizModal(props) {
                 label="Description"
                 multiline
                 rows={3}
-                value={description}
+                defaultValue={description}
                 fullWidth
               />
             </Grid>
           </Grid>
-          <QuestionTabs></QuestionTabs>
+          <QuestionTabs
+            qnFormData={qnFormData}
+            setQnFormData={setQnFormData}
+          ></QuestionTabs>
           <Stack
             spacing={2}
             direction="row"

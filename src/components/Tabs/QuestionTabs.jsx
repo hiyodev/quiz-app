@@ -24,30 +24,10 @@ import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 
 function QuestionTabs(props) {
+  const { qnFormData, setQnFormData } = props;
+
   // For tab-switching
   const [tabValue, setTabValue] = useState("1");
-
-  // For radio-button in Answers
-  const [radioValue, setRadioValue] = useState("True");
-
-  // Store tab data temporarily until user exits out of Modal
-  const [qnFormData, setQnFormData] = useState([
-    {
-      id: 1,
-      question: "",
-      explanation: "",
-      answerType: "",
-      checkboxAns: [
-        { value: "A", answer: false },
-        { value: "B", answer: false },
-      ],
-      radioAns: [
-        { value: "True", answer: false },
-        { value: "False", answer: false },
-      ],
-      textAns: [{ value: "", answer: false }],
-    },
-  ]);
 
   const handleTabChange = (event, newValue) => setTabValue(newValue);
 
@@ -111,6 +91,18 @@ function QuestionTabs(props) {
   const onTabDataChangeHandler = (key, index, value) => {
     setQnFormData((prevData) => {
       prevData[index][key] = value;
+      return [...prevData];
+    });
+  };
+
+  const onAnsSelectHandler = (key, index, selectIndex, selected) => {
+    setQnFormData((prevData) => {
+      if (key === "checkboxAns")
+        prevData[index][key][selectIndex].answer = selected;
+      else if (key === "radioAns") {
+        prevData[index][key].map((currRadio) => (currRadio.answer = false));
+        prevData[index][key][selectIndex].answer = selected;
+      }
       return [...prevData];
     });
   };
@@ -224,7 +216,7 @@ function QuestionTabs(props) {
                         size="small"
                         id="keyword-field"
                         name="keyword-field"
-                        label={`#${textIndex + 1} Keyword`}
+                        label={`#${textIndex + 1} Keyword Answer`}
                         variant="outlined"
                         autoComplete="off"
                         value={currText.value}
@@ -266,64 +258,69 @@ function QuestionTabs(props) {
             )}
             {currQn.answerType === "radio" && (
               <FormControl>
-                <RadioGroup
-                  value={radioValue}
-                  onChange={(e) =>
-                    e.target.value.length !== 0 && setRadioValue(e.target.value)
-                  }
-                >
-                  <FormLabel id="demo-controlled-radio-buttons-group">
-                    Select the correct answer out of the options
-                  </FormLabel>
-                  {currQn.radioAns.map((currRadio, radioIndex) => (
-                    <FormControlLabel
-                      key={radioIndex}
-                      value={currRadio.value}
-                      control={<Radio />}
-                      label={
-                        <>
-                          <TextField
-                            size="small"
-                            value={currRadio.value}
-                            onChange={(e) =>
-                              onAnsChangeHandler(
+                <FormLabel id="demo-controlled-radio-buttons-group">
+                  Select the correct answer out of the options
+                </FormLabel>
+                {currQn.radioAns.map((currRadio, radioIndex) => (
+                  <FormControlLabel
+                    key={radioIndex}
+                    value={currRadio.value}
+                    control={
+                      <Radio
+                        checked={currRadio.answer}
+                        onChange={(e) =>
+                          onAnsSelectHandler(
+                            "radioAns",
+                            index,
+                            radioIndex,
+                            e.target.checked
+                          )
+                        }
+                      />
+                    }
+                    label={
+                      <>
+                        <TextField
+                          size="small"
+                          value={currRadio.value}
+                          onChange={(e) =>
+                            onAnsChangeHandler(
+                              "radioAns",
+                              index,
+                              radioIndex,
+                              e.target.value
+                            )
+                          }
+                        ></TextField>
+                        {radioIndex > 1 && (
+                          <Button
+                            onClick={() =>
+                              onDelAnsOptionHandler(
                                 "radioAns",
                                 index,
-                                radioIndex,
-                                e.target.value
+                                radioIndex
                               )
                             }
-                          ></TextField>
-                          {radioIndex > 1 && (
-                            <Button
-                              onClick={() =>
-                                onDelAnsOptionHandler(
-                                  "radioAns",
-                                  index,
-                                  radioIndex
-                                )
-                              }
-                              sx={{ marginTop: 0.2 }}
-                            >
-                              <Clear />
-                            </Button>
-                          )}
-                          {radioIndex === currQn.radioAns.length - 1 && (
-                            <Button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                onAddAnsOptionHandler("radioAns", index);
-                              }}
-                              sx={{ marginTop: 0.2 }}
-                            >
-                              <AddIcon />
-                            </Button>
-                          )}
-                        </>
-                      }
-                    ></FormControlLabel>
-                  ))}
-                </RadioGroup>
+                            sx={{ marginTop: 0.2 }}
+                          >
+                            <Clear />
+                          </Button>
+                        )}
+                        {radioIndex === currQn.radioAns.length - 1 && (
+                          <Button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              onAddAnsOptionHandler("radioAns", index);
+                            }}
+                            sx={{ marginTop: 0.2 }}
+                          >
+                            <AddIcon />
+                          </Button>
+                        )}
+                      </>
+                    }
+                  ></FormControlLabel>
+                ))}
               </FormControl>
             )}
             {currQn.answerType === "checkbox" && (
@@ -335,7 +332,19 @@ function QuestionTabs(props) {
                   {currQn.checkboxAns.map((currCheckbox, checkboxIndex) => (
                     <FormControlLabel
                       key={checkboxIndex}
-                      control={<Checkbox selected={currCheckbox.selected} />}
+                      control={
+                        <Checkbox
+                          onChange={(e) =>
+                            onAnsSelectHandler(
+                              "checkboxAns",
+                              index,
+                              checkboxIndex,
+                              e.target.checked
+                            )
+                          }
+                          checked={currCheckbox.answer}
+                        />
+                      }
                       label={
                         <>
                           <TextField
