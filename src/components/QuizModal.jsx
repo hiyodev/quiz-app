@@ -18,9 +18,10 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "90vw",
-  "@media (min-width: 800px)": {
-    width: "65vw",
+  "@media (min-width: 900px)": {
+    width: "50vw",
   },
+
   height: "90vh",
   "@media (min-height: 1000px)": {
     height: "80vh",
@@ -137,7 +138,7 @@ export default function QuizModal(props) {
             {"Quiz"}
           </Typography>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12}>
               <TextField
                 id="title-field"
                 name="title-field"
