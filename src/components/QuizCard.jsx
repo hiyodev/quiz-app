@@ -13,7 +13,7 @@ import QuizModal from "./QuizModal";
 import { QuizContext } from "../App";
 
 function QuizCard(props) {
-  const { id, imgUrl, imgAlt, title, description } = props;
+  const { id, imgUrl, title, description } = props;
   const { quizArray, setQuizArray } = useContext(QuizContext);
 
   const onDeleteHandler = () => {
@@ -27,7 +27,6 @@ function QuizCard(props) {
           component="img"
           sx={{ height: 200, objectFit: "contain" }}
           image={imgUrl}
-          title={imgAlt}
         />
       )}
       <CardContent>
@@ -47,7 +46,6 @@ function QuizCard(props) {
           btnText={"Edit"}
           modalTitle={"Editing"}
           imgUrl={imgUrl}
-          imgAlt={imgAlt}
           title={title}
           description={description}
         />

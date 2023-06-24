@@ -143,10 +143,15 @@ function QuestionTabs(props) {
   // However, only when user clicks "SAVE" button then we actually save the questions from temp storage to user storage
   const qnTabPanels = qnFormData.map((currQn, index) => {
     return (
-      <TabPanel value={currQn.id.toString()} key={currQn.id}>
+      <TabPanel
+        value={currQn.id.toString()}
+        key={currQn.id}
+        sx={{ padding: 0 }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
+              margin="dense"
               id="qns-field"
               name="qns-field"
               label="Question Title"
@@ -175,7 +180,7 @@ function QuestionTabs(props) {
             />
           </Grid>
           <Grid item xs={12}>
-            <FormControl required sx={{ minWidth: 150 }}>
+            <FormControl required fullWidth>
               <InputLabel id="simple-select-required-label">
                 Answer Type
               </InputLabel>
@@ -210,28 +215,27 @@ function QuestionTabs(props) {
             {currQn.answerType === "text" && (
               <>
                 {currQn.textAns.map((currText, textIndex) => (
-                  <Grid container key={textIndex}>
-                    <Grid item>
-                      <TextField
-                        size="small"
-                        id="keyword-field"
-                        name="keyword-field"
-                        label={`#${textIndex + 1} Keyword Answer`}
-                        variant="outlined"
-                        autoComplete="off"
-                        value={currText.value}
-                        onChange={(e) =>
-                          onAnsChangeHandler(
-                            "textAns",
-                            index,
-                            textIndex,
-                            e.target.value
-                          )
-                        }
-                        required
-                        sx={{ margin: 0.5 }}
-                      />
-                    </Grid>
+                  <Box sx={{ display: "flex" }} key={textIndex}>
+                    <TextField
+                      size="small"
+                      id="keyword-field"
+                      name="keyword-field"
+                      label={`#${textIndex + 1} Keyword`}
+                      variant="outlined"
+                      autoComplete="off"
+                      value={currText.value}
+                      onChange={(e) =>
+                        onAnsChangeHandler(
+                          "textAns",
+                          index,
+                          textIndex,
+                          e.target.value
+                        )
+                      }
+                      required
+                      sx={{ margin: 0.5, flex: 1 }}
+                    />
+
                     {textIndex > 0 && (
                       <Button
                         onClick={() =>
@@ -252,7 +256,7 @@ function QuestionTabs(props) {
                         <AddIcon />
                       </Button>
                     )}
-                  </Grid>
+                  </Box>
                 ))}
               </>
             )}
@@ -286,8 +290,9 @@ function QuestionTabs(props) {
                         />
                       }
                       label={
-                        <>
+                        <Box sx={{ display: "flex" }} key={radioIndex}>
                           <TextField
+                            fullWidth
                             size="small"
                             value={currRadio.value}
                             onChange={(e) =>
@@ -299,6 +304,7 @@ function QuestionTabs(props) {
                               )
                             }
                             required
+                            sx={{ margin: 0.5 }}
                           ></TextField>
                           {radioIndex > 1 && (
                             <Button
@@ -325,7 +331,7 @@ function QuestionTabs(props) {
                               <AddIcon />
                             </Button>
                           )}
-                        </>
+                        </Box>
                       }
                     ></FormControlLabel>
                   ))}
@@ -361,7 +367,7 @@ function QuestionTabs(props) {
                         />
                       }
                       label={
-                        <>
+                        <Box sx={{ display: "flex" }} key={checkboxIndex}>
                           <TextField
                             size="small"
                             autoComplete="off"
@@ -375,6 +381,7 @@ function QuestionTabs(props) {
                               )
                             }
                             required
+                            sx={{ margin: 0.5 }}
                           />
                           {checkboxIndex > 0 && (
                             <Button
@@ -401,7 +408,7 @@ function QuestionTabs(props) {
                               <AddIcon />
                             </Button>
                           )}
-                        </>
+                        </Box>
                       }
                     />
                   ))}

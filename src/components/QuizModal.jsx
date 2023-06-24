@@ -17,7 +17,16 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 600,
+  width: "90vw",
+  "@media (min-width: 800px)": {
+    width: "65vw",
+  },
+  height: "90vh",
+  "@media (min-height: 1000px)": {
+    height: "80vh",
+  },
+  overflow: "hidden",
+  overflowY: "scroll",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -30,16 +39,8 @@ const style = {
 // 3. Opening Quizzes
 
 export default function QuizModal(props) {
-  const {
-    id,
-    btnVariant,
-    btnText,
-    imgUrl,
-    imgAlt,
-    modalTitle,
-    title,
-    description,
-  } = props;
+  const { id, btnVariant, btnText, imgUrl, modalTitle, title, description } =
+    props;
 
   const { quizArray, setQuizArray } = useContext(QuizContext);
 
@@ -74,7 +75,6 @@ export default function QuizModal(props) {
 
     const inputTitle = data.get("title-field");
     const imageUrl = data.get("imgurl-field");
-    const imageAlt = data.get("imgalt-field");
     const inputDescription = data.get("description-field");
 
     setQuizArray((quizArray) => {
@@ -84,7 +84,6 @@ export default function QuizModal(props) {
             return {
               ...currQuiz,
               imgUrl: imageUrl,
-              imgAlt: imageAlt,
               title: inputTitle,
               description: inputDescription,
               tabs: qnFormData,
@@ -105,7 +104,6 @@ export default function QuizModal(props) {
           {
             id: newId,
             imgUrl: imageUrl,
-            imgAlt: imageAlt,
             title: inputTitle,
             description: inputDescription,
             tabs: qnFormData,
@@ -139,16 +137,17 @@ export default function QuizModal(props) {
             {"Quiz"}
           </Typography>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={12} md={8}>
               <TextField
                 id="title-field"
                 name="title-field"
                 label="Title"
                 variant="outlined"
                 defaultValue={title}
-                sx={{ width: 300 }}
                 inputProps={{ maxLength: 30 }}
                 required
+                fullWidth
+                autoComplete="off"
               />
             </Grid>
             <Grid item xs={12}>
@@ -158,16 +157,8 @@ export default function QuizModal(props) {
                 label="Image URL"
                 variant="outlined"
                 defaultValue={imgUrl}
-                sx={{ width: 370 }}
-              />{" "}
-              <TextField
-                id="imgalt-field"
-                name="imgalt-field"
-                label="Image Alt"
-                variant="outlined"
-                defaultValue={imgAlt}
-                sx={{ width: 155 }}
-                inputProps={{ maxLength: 14 }}
+                fullWidth
+                autoComplete="off"
               />
             </Grid>
             <Grid item xs={12}>
@@ -179,6 +170,7 @@ export default function QuizModal(props) {
                 rows={3}
                 defaultValue={description}
                 fullWidth
+                autoComplete="off"
               />
             </Grid>
           </Grid>
