@@ -12,11 +12,11 @@ import {
   InputLabel,
   MenuItem,
   Radio,
-  RadioGroup,
   FormLabel,
   FormControlLabel,
   FormGroup,
   Checkbox,
+  RadioGroup,
 } from "@mui/material";
 import { TabList, TabPanel, TabContext } from "@mui/lab";
 import { Clear } from "@mui/icons-material";
@@ -176,12 +176,12 @@ function QuestionTabs(props) {
           </Grid>
           <Grid item xs={12}>
             <FormControl required sx={{ minWidth: 150 }}>
-              <InputLabel id="demo-simple-select-required-label">
+              <InputLabel id="simple-select-required-label">
                 Answer Type
               </InputLabel>
               <Select
-                labelId="demo-simple-select-required-label"
-                id="demo-simple-select-required"
+                labelId="simple-select-required-label"
+                id="simple-select-required"
                 value={currQn.answerType}
                 label="Answer Type *"
                 onChange={(e) =>
@@ -257,71 +257,80 @@ function QuestionTabs(props) {
               </>
             )}
             {currQn.answerType === "radio" && (
-              <FormControl>
-                <FormLabel id="demo-controlled-radio-buttons-group">
-                  Select the correct answer out of the options
-                </FormLabel>
-                {currQn.radioAns.map((currRadio, radioIndex) => (
-                  <FormControlLabel
-                    key={radioIndex}
-                    value={currRadio.value}
-                    control={
-                      <Radio
-                        checked={currRadio.answer}
-                        onChange={(e) =>
-                          onAnsSelectHandler(
-                            "radioAns",
-                            index,
-                            radioIndex,
-                            e.target.checked
-                          )
-                        }
-                      />
-                    }
-                    label={
-                      <>
-                        <TextField
-                          size="small"
-                          value={currRadio.value}
+              <RadioGroup>
+                <FormControl>
+                  <FormLabel id="controlled-radio-buttons-group">
+                    Select the correct answer out of the options
+                  </FormLabel>
+                  {currQn.radioAns.map((currRadio, radioIndex) => (
+                    <FormControlLabel
+                      required
+                      sx={{
+                        "& .MuiFormControlLabel-asterisk": {
+                          visibility: "hidden",
+                        },
+                      }}
+                      key={radioIndex}
+                      value={currRadio.value}
+                      control={
+                        <Radio
+                          checked={currRadio.answer}
                           onChange={(e) =>
-                            onAnsChangeHandler(
+                            onAnsSelectHandler(
                               "radioAns",
                               index,
                               radioIndex,
-                              e.target.value
+                              e.target.checked
                             )
                           }
-                        ></TextField>
-                        {radioIndex > 1 && (
-                          <Button
-                            onClick={() =>
-                              onDelAnsOptionHandler(
+                        />
+                      }
+                      label={
+                        <>
+                          <TextField
+                            size="small"
+                            value={currRadio.value}
+                            onChange={(e) =>
+                              onAnsChangeHandler(
                                 "radioAns",
                                 index,
-                                radioIndex
+                                radioIndex,
+                                e.target.value
                               )
                             }
-                            sx={{ marginTop: 0.2 }}
-                          >
-                            <Clear />
-                          </Button>
-                        )}
-                        {radioIndex === currQn.radioAns.length - 1 && (
-                          <Button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              onAddAnsOptionHandler("radioAns", index);
-                            }}
-                            sx={{ marginTop: 0.2 }}
-                          >
-                            <AddIcon />
-                          </Button>
-                        )}
-                      </>
-                    }
-                  ></FormControlLabel>
-                ))}
-              </FormControl>
+                            required
+                          ></TextField>
+                          {radioIndex > 1 && (
+                            <Button
+                              onClick={() =>
+                                onDelAnsOptionHandler(
+                                  "radioAns",
+                                  index,
+                                  radioIndex
+                                )
+                              }
+                              sx={{ marginTop: 0.2 }}
+                            >
+                              <Clear />
+                            </Button>
+                          )}
+                          {radioIndex === currQn.radioAns.length - 1 && (
+                            <Button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                onAddAnsOptionHandler("radioAns", index);
+                              }}
+                              sx={{ marginTop: 0.2 }}
+                            >
+                              <AddIcon />
+                            </Button>
+                          )}
+                        </>
+                      }
+                    ></FormControlLabel>
+                  ))}
+                </FormControl>
+              </RadioGroup>
             )}
             {currQn.answerType === "checkbox" && (
               <>
@@ -331,6 +340,12 @@ function QuestionTabs(props) {
                 <FormGroup>
                   {currQn.checkboxAns.map((currCheckbox, checkboxIndex) => (
                     <FormControlLabel
+                      required
+                      sx={{
+                        "& .MuiFormControlLabel-asterisk": {
+                          visibility: "hidden",
+                        },
+                      }}
                       key={checkboxIndex}
                       control={
                         <Checkbox
@@ -359,6 +374,7 @@ function QuestionTabs(props) {
                                 e.target.value
                               )
                             }
+                            required
                           />
                           {checkboxIndex > 0 && (
                             <Button
