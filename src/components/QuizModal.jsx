@@ -45,7 +45,11 @@ export default function QuizModal(props) {
 
   const { quizArray, setQuizArray } = useContext(QuizContext);
 
-  // Store tab data temporarily until user exits out of Modal
+  // TODO: Something is wrong here, everytime data is modified on question tabs and modal is exited
+  // the old data persists until browser refresh. for whatever reason, its storing the temp data which it should not.
+  const clone = id ? JSON.parse(JSON.stringify(quizArray[id].tabs)) : null;
+  console.log(clone);
+
   const [qnFormData, setQnFormData] = useState(
     quizArray[id]?.tabs || [
       {
@@ -67,10 +71,16 @@ export default function QuizModal(props) {
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleModalOpen = () => setIsModalOpen(true);
-  const handleModalClose = () => setIsModalOpen(false);
+  const handleModalState = (state) => {
+    console.log(quizArray[id]?.tabs);
+    // Discard changes in Modal if not saved
+
+    setIsModalOpen(state);
+  };
 
   const onSubmitHandler = (e) => {
+    console.log("Saving");
+
     e.preventDefault();
     const data = new FormData(e.currentTarget);
 
@@ -113,17 +123,17 @@ export default function QuizModal(props) {
       }
     });
 
-    handleModalClose();
+    setIsModalOpen(false);
   };
 
   return (
     <div>
-      <Button onClick={handleModalOpen} variant={btnVariant}>
+      <Button onClick={() => handleModalState(true)} variant={btnVariant}>
         {btnText}
       </Button>
       <Modal
         open={isModalOpen}
-        onClose={handleModalClose}
+        onClose={() => handleModalState(false)}
         aria-labelledby="modal-modal-title"
       >
         <Box component="form" sx={style} onSubmit={onSubmitHandler}>
@@ -186,7 +196,7 @@ export default function QuizModal(props) {
             display="flex"
             justifyContent="space-between"
           >
-            <Button variant="outlined" onClick={handleModalClose}>
+            <Button variant="outlined" onClick={() => handleModalState(false)}>
               Cancel
             </Button>
             <Button variant="contained" type="submit">
