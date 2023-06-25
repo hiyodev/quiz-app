@@ -43,9 +43,8 @@ function QuestionTabs(props) {
     }
   };
 
-  // Only runs when a quiz modal is open
+  // Only runs when a quiz modal is open and when tabs change
   useEffect(() => {
-    console.log("formdata changed");
     onCheckboxStatusHandler(qnFormData[tabValue - 1]);
   }, [tabValue]);
 
