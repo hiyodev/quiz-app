@@ -21,6 +21,8 @@ function QuizCard(props) {
     setQuizArray(quizArray.filter((currQuiz) => currQuiz.id !== id));
   };
 
+  if (id === 0) console.log(quizArray[id].tabs);
+
   return (
     <Card variant="outlined" sx={{ minWidth: 250, maxWidth: 250 }}>
       <CardMedia
@@ -29,12 +31,23 @@ function QuizCard(props) {
         image={imgUrl || noImagePlaceholder}
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography variant="h5" component="div">
           {title}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {description}
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          borderBottom={1}
+          gutterBottom
+        >
+          {"Quiz Questions: " + quizArray[id].tabs.length}
         </Typography>
+        {description.length === 0 && (
+          <Typography variant="body2" color="text.secondary">
+            {"No description available..."}
+          </Typography>
+        )}
+        <Typography color="text.primary">{description}</Typography>
       </CardContent>
       <CardActions>
         <Button onClick={onDeleteHandler}>
