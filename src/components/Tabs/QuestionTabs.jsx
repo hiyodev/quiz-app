@@ -21,7 +21,7 @@ import {
 import { TabList, TabPanel, TabContext } from "@mui/lab";
 import { Clear } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function QuestionTabs(props) {
   const { qnFormData, setQnFormData } = props;
@@ -30,6 +30,24 @@ function QuestionTabs(props) {
   const [tabValue, setTabValue] = useState("1");
 
   const handleTabChange = (event, newValue) => setTabValue(newValue);
+
+  // For checkbox ans, check if at least one is checked
+  const [checkboxChecked, setCheckboxChecked] = useState(false);
+
+  const onCheckboxStatusHandler = (currQn) => {
+    for (let i = 0; i < currQn.checkboxAns.length; ++i) {
+      if (currQn.checkboxAns[i].answer) {
+        setCheckboxChecked(true);
+        break;
+      } else setCheckboxChecked(false);
+    }
+  };
+
+  // Only runs when a quiz modal is open
+  useEffect(() => {
+    console.log("formdata changed");
+    onCheckboxStatusHandler(qnFormData[tabValue - 1]);
+  }, [tabValue]);
 
   const onAddAnsOptionHandler = (key, index, text) => {
     setQnFormData((prevData) => {
@@ -346,23 +364,25 @@ function QuestionTabs(props) {
                 <FormGroup>
                   {currQn.checkboxAns.map((currCheckbox, checkboxIndex) => (
                     <FormControlLabel
-                      required
                       sx={{
                         ".MuiFormControlLabel-asterisk": {
                           visibility: "hidden",
                         },
                       }}
+                      required={!checkboxChecked}
                       key={checkboxIndex}
                       control={
                         <Checkbox
-                          onChange={(e) =>
+                          onChange={(e) => {
                             onAnsSelectHandler(
                               "checkboxAns",
                               index,
                               checkboxIndex,
                               e.target.checked
-                            )
-                          }
+                            );
+
+                            onCheckboxStatusHandler(currQn);
+                          }}
                           checked={currCheckbox.answer}
                         />
                       }
@@ -385,13 +405,14 @@ function QuestionTabs(props) {
                           />
                           {checkboxIndex > 0 && (
                             <Button
-                              onClick={() =>
+                              onClick={() => {
                                 onDelAnsOptionHandler(
                                   "checkboxAns",
                                   index,
                                   checkboxIndex
-                                )
-                              }
+                                );
+                                onCheckboxStatusHandler(currQn);
+                              }}
                               sx={{ marginTop: 0.2 }}
                             >
                               <Clear />
@@ -402,6 +423,7 @@ function QuestionTabs(props) {
                               onClick={(e) => {
                                 e.preventDefault();
                                 onAddAnsOptionHandler("checkboxAns", index);
+                                onCheckboxStatusHandler(currQn);
                               }}
                               sx={{ marginTop: 0.2 }}
                             >

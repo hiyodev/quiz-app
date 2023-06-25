@@ -58,7 +58,7 @@ function App() {
               <Grid item>
                 <QuizModal
                   btnText="Create Quiz"
-                  modalTitle="Create"
+                  modalType="Create"
                   btnVariant="contained"
                 />
               </Grid>
