@@ -1,6 +1,3 @@
-import "./App.css";
-import { useState, createContext, useEffect } from "react";
-
 import {
   AppBar,
   Typography,
@@ -10,9 +7,11 @@ import {
   Grid,
   Box,
 } from "@mui/material";
+import "./App.css";
 
 import QuizCard from "./components/QuizCard";
 import QuizModal from "./components/QuizModal";
+import { useState, createContext, useEffect } from "react";
 
 export const QuizContext = createContext(null);
 

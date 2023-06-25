@@ -45,7 +45,7 @@ function QuizCard(props) {
             {"No description available..."}
           </Typography>
         )}
-        <Typography>{description}</Typography>
+        <Typography sx={{ whiteSpace: "pre-wrap" }}>{description}</Typography>
       </CardContent>
       <CardActions>
         <Button onClick={onDeleteHandler}>
