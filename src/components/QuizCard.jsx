@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import noImagePlaceholder from "../assets/images/no-image-placeholder.png";
 
 import { useContext } from "react";
 import QuizModal from "./QuizModal";
@@ -21,14 +22,12 @@ function QuizCard(props) {
   };
 
   return (
-    <Card variant="outlined" sx={{ maxWidth: 250 }}>
-      {imgUrl.length !== 0 && (
-        <CardMedia
-          component="img"
-          sx={{ height: 200, objectFit: "contain" }}
-          image={imgUrl}
-        />
-      )}
+    <Card variant="outlined" sx={{ minWidth: 250, maxWidth: 250 }}>
+      <CardMedia
+        component="img"
+        sx={{ height: 250, objectFit: "contain" }}
+        image={imgUrl || noImagePlaceholder}
+      />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}

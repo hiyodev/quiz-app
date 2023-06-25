@@ -186,7 +186,7 @@ function QuestionTabs(props) {
             <TextField
               id="qns-explanation-field"
               name="qns-explanation-field"
-              label="Additional Question Explanation / Examples / Hints goes here..."
+              label="Additional Hints / Explanations / etc..."
               value={currQn.explanation}
               onChange={(e) =>
                 onTabDataChangeHandler("explanation", index, e.target.value)
