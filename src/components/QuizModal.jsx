@@ -34,46 +34,66 @@ const style = {
   p: 4,
 };
 
-// NOTE: Use this only for
-// 1. Creating quizzes
-// 2. Editing Quizzes
-// 3. Opening Quizzes
-
 export default function QuizModal(props) {
-  const { id, btnVariant, btnText, imgUrl, modalTitle, title, description } =
-    props;
+  const {
+    quizCardId,
+    btnVariant,
+    btnText,
+    imgUrl,
+    modalType,
+    title,
+    description,
+  } = props;
 
   const { quizArray, setQuizArray } = useContext(QuizContext);
 
-  // TODO: Something is wrong here, everytime data is modified on question tabs and modal is exited
-  // the old data persists until browser refresh. for whatever reason, its storing the temp data which it should not.
-  const clone = id ? JSON.parse(JSON.stringify(quizArray[id].tabs)) : null;
-  console.log(clone);
-
   const [qnFormData, setQnFormData] = useState(
-    quizArray[id]?.tabs || [
-      {
-        id: 1,
-        question: "",
-        explanation: "",
-        answerType: "",
-        checkboxAns: [
-          { value: "A", answer: false },
-          { value: "B", answer: false },
-        ],
-        radioAns: [
-          { value: "True", answer: false },
-          { value: "False", answer: false },
-        ],
-        textAns: [{ value: "", answer: false }],
-      },
-    ]
+    quizCardId !== undefined
+      ? JSON.parse(JSON.stringify(quizArray[quizCardId].tabs))
+      : [
+          {
+            id: 1,
+            question: "",
+            explanation: "",
+            answerType: "",
+            checkboxAns: [
+              { value: "A", answer: false },
+              { value: "B", answer: false },
+            ],
+            radioAns: [
+              { value: "True", answer: false },
+              { value: "False", answer: false },
+            ],
+            textAns: [{ value: "", answer: false }],
+          },
+        ]
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleModalState = (state) => {
-    console.log(quizArray[id]?.tabs);
-    // Discard changes in Modal if not saved
+    // Discard any changes in Modal that is not saved
+    if (state === false) {
+      if (quizCardId !== undefined)
+        setQnFormData(JSON.parse(JSON.stringify(quizArray[quizCardId].tabs)));
+      else
+        setQnFormData([
+          {
+            id: 1,
+            question: "",
+            explanation: "",
+            answerType: "",
+            checkboxAns: [
+              { value: "A", answer: false },
+              { value: "B", answer: false },
+            ],
+            radioAns: [
+              { value: "True", answer: false },
+              { value: "False", answer: false },
+            ],
+            textAns: [{ value: "", answer: false }],
+          },
+        ]);
+    }
 
     setIsModalOpen(state);
   };
@@ -91,7 +111,7 @@ export default function QuizModal(props) {
     setQuizArray((quizArray) => {
       if (btnText === "Edit")
         return quizArray.map((currQuiz) => {
-          if (currQuiz.id === id) {
+          if (currQuiz.id === quizCardId) {
             return {
               ...currQuiz,
               imgUrl: imageUrl,
@@ -143,7 +163,7 @@ export default function QuizModal(props) {
             sx={{ mb: 4 }}
             gutterBottom
           >
-            {modalTitle}
+            {modalType}
             <b> {title} </b>
             {"Quiz"}
           </Typography>

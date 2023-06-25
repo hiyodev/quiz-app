@@ -42,9 +42,9 @@ function QuizCard(props) {
           <DeleteIcon />
         </Button>
         <QuizModal
-          id={id}
+          quizCardId={id}
           btnText={"Edit"}
-          modalTitle={"Editing"}
+          modalType={"Editing"}
           imgUrl={imgUrl}
           title={title}
           description={description}
