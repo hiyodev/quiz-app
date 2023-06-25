@@ -22,7 +22,6 @@ function App() {
   );
 
   useEffect(() => {
-    console.log("Saving to localStorage");
     localStorage.setItem("quizData", JSON.stringify(quizArray));
   }, [quizArray]);
 

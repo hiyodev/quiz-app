@@ -99,8 +99,6 @@ export default function QuizModal(props) {
   };
 
   const onSubmitHandler = (e) => {
-    console.log("Saving");
-
     e.preventDefault();
     const data = new FormData(e.currentTarget);
 
