@@ -5,17 +5,23 @@ import {
   CardMedia,
   Button,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import noImagePlaceholder from "../assets/images/no-image-placeholder.png";
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import QuizModal from "./QuizModal";
 import { QuizContext } from "../App";
 
 function QuizCard(props) {
   const { id, imgUrl, title, description } = props;
   const { quizArray, setQuizArray } = useContext(QuizContext);
+  const [openDelModal, setOpenDelModal] = useState(false);
 
   const onDeleteHandler = () => {
     setQuizArray(quizArray.filter((currQuiz) => currQuiz.id !== id));
@@ -48,9 +54,30 @@ function QuizCard(props) {
         <Typography sx={{ whiteSpace: "pre-wrap" }}>{description}</Typography>
       </CardContent>
       <CardActions>
-        <Button onClick={onDeleteHandler}>
+        <Button onClick={() => setOpenDelModal(true)}>
           <DeleteIcon />
         </Button>
+        <Dialog
+          open={openDelModal}
+          onClose={() => setOpenDelModal(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Deleting"} <b>{title}</b> {"Quiz"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenDelModal(false)}>Cancel</Button>
+            <Button onClick={onDeleteHandler} autoFocus>
+              Confirm
+            </Button>
+          </DialogActions>
+        </Dialog>
         <QuizModal
           quizCardId={id}
           btnText={"Edit"}
