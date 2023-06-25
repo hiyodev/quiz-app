@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 
 import { useState, useContext } from "react";
-import { QuizContext } from "../App";
-import QuestionTabs from "./Tabs/QuestionTabs";
+import { QuizContext } from "../../App";
+import QuestionTabs from "../Tabs/QuestionTabs";
 
 const style = {
   position: "absolute",

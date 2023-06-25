@@ -12,11 +12,11 @@ import {
   DialogActions,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import noImagePlaceholder from "../assets/images/no-image-placeholder.png";
+import noImagePlaceholder from "../../assets/images/no-image-placeholder.png";
 
 import { useContext, useState } from "react";
 import QuizModal from "./QuizModal";
-import { QuizContext } from "../App";
+import { QuizContext } from "../../App";
 
 function QuizCard(props) {
   const { id, imgUrl, title, description } = props;

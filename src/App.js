@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import "./App.css";
 
-import QuizCard from "./components/QuizCard";
-import QuizModal from "./components/QuizModal";
+import QuizCard from "./components/Quiz/QuizCard";
+import QuizModal from "./components/Quiz/QuizModal";
 import { useState, createContext, useEffect } from "react";
 
 export const QuizContext = createContext(null);
