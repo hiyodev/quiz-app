@@ -17,6 +17,8 @@ import {
   FormGroup,
   Checkbox,
   RadioGroup,
+  Switch,
+  Typography,
 } from "@mui/material";
 import { TabList, TabPanel, TabContext } from "@mui/lab";
 import { Clear } from "@mui/icons-material";
@@ -70,6 +72,8 @@ function QuestionTabs(props) {
       ...qnFormData,
       {
         id: newId,
+        timeLimit: false,
+        timeDuration: "00:00",
         question: "",
         explanation: "",
         answerType: "",
@@ -168,8 +172,35 @@ function QuestionTabs(props) {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
+            <FormGroup row>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={currQn.timeLimit}
+                    onChange={(e) =>
+                      onTabDataChangeHandler(
+                        "timeLimit",
+                        index,
+                        e.target.checked
+                      )
+                    }
+                  />
+                }
+                label={
+                  currQn.timeLimit ? (
+                    <Typography>Test</Typography>
+                  ) : (
+                    <Typography color={"text.secondary"}>
+                      No Time Limits
+                    </Typography>
+                  )
+                }
+                sx={{ paddingTop: 1 }}
+              />
+            </FormGroup>
+          </Grid>
+          <Grid item xs={12}>
             <TextField
-              margin="dense"
               id="qns-field"
               name="qns-field"
               label="Question Title"
