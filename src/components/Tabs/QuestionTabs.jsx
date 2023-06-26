@@ -173,7 +173,7 @@ function QuestionTabs(props) {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <FormGroup row>
+            <FormGroup>
               <FormControlLabel
                 control={
                   <Switch
@@ -202,24 +202,12 @@ function QuestionTabs(props) {
                             e.target.value < 0 ? 0 : e.target.value
                           )
                         }
-                        sx={{
-                          width: "50%",
-                          "@media (min-width: 400px)": {
-                            width: "25%",
-                          },
-                        }}
                       ></TextField>
                       <TextField
                         size="small"
                         type="number"
                         label="seconds"
                         value={currQn.secDuration}
-                        sx={{
-                          width: "50%",
-                          "@media (min-width: 400px)": {
-                            width: "25%",
-                          },
-                        }}
                         onChange={(e) =>
                           onTabDataChangeHandler(
                             "secDuration",
@@ -235,7 +223,13 @@ function QuestionTabs(props) {
                     </Typography>
                   )
                 }
-                sx={{ paddingTop: 1 }}
+                sx={{
+                  paddingTop: 1,
+                  width: "100%",
+                  "@media (min-width: 600px)": {
+                    width: "65%",
+                  },
+                }}
               />
             </FormGroup>
           </Grid>
