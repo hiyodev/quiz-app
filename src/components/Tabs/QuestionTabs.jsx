@@ -73,7 +73,8 @@ function QuestionTabs(props) {
       {
         id: newId,
         timeLimit: false,
-        timeDuration: "00:00",
+        minDuration: 0,
+        secDuration: 0,
         question: "",
         explanation: "",
         answerType: "",
@@ -188,7 +189,46 @@ function QuestionTabs(props) {
                 }
                 label={
                   currQn.timeLimit ? (
-                    <Typography>Test</Typography>
+                    <Box sx={{ display: "flex" }} columnGap={1}>
+                      <TextField
+                        size="small"
+                        type="number"
+                        label="minutes"
+                        value={currQn.minDuration}
+                        onChange={(e) =>
+                          onTabDataChangeHandler(
+                            "minDuration",
+                            index,
+                            e.target.value < 0 ? 0 : e.target.value
+                          )
+                        }
+                        sx={{
+                          width: "50%",
+                          "@media (min-width: 400px)": {
+                            width: "25%",
+                          },
+                        }}
+                      ></TextField>
+                      <TextField
+                        size="small"
+                        type="number"
+                        label="seconds"
+                        value={currQn.secDuration}
+                        sx={{
+                          width: "50%",
+                          "@media (min-width: 400px)": {
+                            width: "25%",
+                          },
+                        }}
+                        onChange={(e) =>
+                          onTabDataChangeHandler(
+                            "secDuration",
+                            index,
+                            e.target.value < 0 ? 0 : e.target.value
+                          )
+                        }
+                      ></TextField>
+                    </Box>
                   ) : (
                     <Typography color={"text.secondary"}>
                       No Time Limits

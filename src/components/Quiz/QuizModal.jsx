@@ -53,6 +53,9 @@ export default function QuizModal(props) {
       : [
           {
             id: 1,
+            timeLimit: false,
+            minDuration: 0,
+            secDuration: 0,
             question: "",
             explanation: "",
             answerType: "",
@@ -79,7 +82,10 @@ export default function QuizModal(props) {
         setQnFormData([
           {
             id: 1,
-            question: "",
+            timeLimit: false,
+            minDuration: 0,
+            secDuration: 0,
+            question: "?",
             explanation: "",
             answerType: "",
             checkboxAns: [
