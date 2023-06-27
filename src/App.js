@@ -21,7 +21,7 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const [quizArray, setQuizArray] = useState(
     JSON.parse(localStorage.getItem("quizData")) || []
   );
