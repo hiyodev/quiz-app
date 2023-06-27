@@ -191,6 +191,7 @@ function QuestionTabs(props) {
                   currQn.timeLimit ? (
                     <Box sx={{ display: "flex" }} columnGap={1}>
                       <TextField
+                        margin="dense"
                         size="small"
                         type="number"
                         label="minutes"
@@ -204,6 +205,7 @@ function QuestionTabs(props) {
                         }
                       ></TextField>
                       <TextField
+                        margin="dense"
                         size="small"
                         type="number"
                         label="seconds"

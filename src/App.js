@@ -7,6 +7,7 @@ import {
   Grid,
   Box,
 } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import "./App.css";
 
 import QuizCard from "./components/Quiz/QuizCard";
@@ -14,6 +15,12 @@ import QuizModal from "./components/Quiz/QuizModal";
 import { useState, createContext, useEffect } from "react";
 
 export const QuizContext = createContext(null);
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 function App() {
   const [quizArray, setQuizArray] = useState(
@@ -39,41 +46,41 @@ function App() {
   });
 
   return (
-    <QuizContext.Provider value={{ quizArray, setQuizArray }}>
-      <CssBaseline />
-      <AppBar position="relative" sx={{ bgcolor: "white" }}>
-        <Toolbar>
-          <Typography variant="h5" sx={{ color: "black" }}>
-            QuizApp
-          </Typography>
-        </Toolbar>
-      </AppBar>
+    <ThemeProvider theme={darkTheme}>
+      <QuizContext.Provider value={{ quizArray, setQuizArray }}>
+        <CssBaseline />
+        <AppBar position="relative">
+          <Toolbar>
+            <Typography variant="h5">QuizApp</Typography>
+          </Toolbar>
+        </AppBar>
 
-      <main>
-        <Container maxWidth="sm">
-          <Box mt={2} mb={2}>
-            <Grid container spacing={2} justifyContent="center">
-              <Grid item>
-                <QuizModal
-                  btnText="Create Quiz"
-                  modalType="Create"
-                  btnVariant="contained"
-                />
+        <main>
+          <Container maxWidth="sm">
+            <Box mt={2} mb={2}>
+              <Grid container spacing={2} justifyContent="center">
+                <Grid item>
+                  <QuizModal
+                    btnText="Create Quiz"
+                    modalType="Create"
+                    btnVariant="contained"
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          </Box>
-        </Container>
-        <Grid
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-          justifyContent="center"
-          mb={1}
-        >
-          {quizCards}
-        </Grid>
-      </main>
-    </QuizContext.Provider>
+            </Box>
+          </Container>
+          <Grid
+            container
+            spacing={{ xs: 2, md: 3 }}
+            columns={{ xs: 4, sm: 8, md: 12 }}
+            justifyContent="center"
+            mb={1}
+          >
+            {quizCards}
+          </Grid>
+        </main>
+      </QuizContext.Provider>
+    </ThemeProvider>
   );
 }
 

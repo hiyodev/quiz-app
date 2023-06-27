@@ -86,7 +86,7 @@ function QuizCard(props) {
           title={title}
           description={description}
         />
-        <Button>Open</Button>
+        <Button>Start</Button>
       </CardActions>
     </Card>
   );
