@@ -46,9 +46,10 @@ function QuestionTabs(props) {
     }
   };
 
-  // Only runs when a quiz modal is open and when tabs change
+  // Only runs when a quiz modal is opened and changing of tab view
   useEffect(() => {
     onCheckboxStatusHandler(qnFormData[tabValue - 1]);
+    // eslint-disable-next-line
   }, [tabValue]);
 
   const onAddAnsOptionHandler = (key, index, text) => {

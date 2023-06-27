@@ -5,7 +5,7 @@ import { QuizContext } from "../App";
 import { useContext } from "react";
 
 function HomePage(props) {
-  const { quizArray, setQuizArray } = useContext(QuizContext);
+  const { quizArray } = useContext(QuizContext);
 
   const quizCards = quizArray.map((quiz) => {
     return (
