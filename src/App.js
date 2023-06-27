@@ -1,20 +1,10 @@
-import {
-  AppBar,
-  Typography,
-  Container,
-  CssBaseline,
-  Toolbar,
-  Grid,
-  Box,
-} from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import "./App.css";
 
-import QuizCard from "./components/Quiz/QuizCard";
-import QuizModal from "./components/Quiz/QuizModal";
 import { useState, createContext, useEffect } from "react";
-import ThemeToggleSwitch from "./components/Buttons/ThemeToggleSwitch";
 import Navbar from "./components/Navbar/Navbar";
+import "./App.css";
+import HomePage from "./pages/HomePage";
 
 export const QuizContext = createContext(null);
 
@@ -40,50 +30,12 @@ function App() {
     localStorage.setItem("quizData", JSON.stringify(quizArray));
   }, [quizArray]);
 
-  const quizCards = quizArray.map((quiz) => {
-    return (
-      <Grid item key={quiz.id}>
-        <QuizCard
-          id={quiz.id}
-          imgUrl={quiz.imgUrl}
-          imgAlt={quiz.imgAlt}
-          title={quiz.title}
-          description={quiz.description}
-        ></QuizCard>
-      </Grid>
-    );
-  });
-
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <QuizContext.Provider value={{ quizArray, setQuizArray }}>
         <CssBaseline />
         <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
-
-        <main>
-          <Container maxWidth="sm">
-            <Box mt={2} mb={2}>
-              <Grid container spacing={2} justifyContent="center">
-                <Grid item>
-                  <QuizModal
-                    btnText="Create Quiz"
-                    modalType="Create"
-                    btnVariant="contained"
-                  />
-                </Grid>
-              </Grid>
-            </Box>
-          </Container>
-          <Grid
-            container
-            spacing={{ xs: 2, md: 3 }}
-            columns={{ xs: 4, sm: 8, md: 12 }}
-            justifyContent="center"
-            mb={1}
-          >
-            {quizCards}
-          </Grid>
-        </main>
+        <HomePage />
       </QuizContext.Provider>
     </ThemeProvider>
   );
