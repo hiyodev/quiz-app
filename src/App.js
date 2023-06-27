@@ -13,8 +13,15 @@ import "./App.css";
 import QuizCard from "./components/Quiz/QuizCard";
 import QuizModal from "./components/Quiz/QuizModal";
 import { useState, createContext, useEffect } from "react";
+import ThemeToggleSwitch from "./components/Buttons/ThemeToggleSwitch";
 
 export const QuizContext = createContext(null);
+
+const lightTheme = createTheme({
+  palette: {
+    mode: "light",
+  },
+});
 
 const darkTheme = createTheme({
   palette: {
@@ -23,6 +30,7 @@ const darkTheme = createTheme({
 });
 
 function App() {
+  const [darkMode, setDarkMode] = useState(false);
   const [quizArray, setQuizArray] = useState(
     JSON.parse(localStorage.getItem("quizData")) || []
   );
@@ -46,12 +54,15 @@ function App() {
   });
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <QuizContext.Provider value={{ quizArray, setQuizArray }}>
         <CssBaseline />
-        <AppBar position="relative">
+        <AppBar position="static">
           <Toolbar>
-            <Typography variant="h5">QuizApp</Typography>
+            <Typography variant="h5" sx={{ flex: 1 }}>
+              QuizApp
+            </Typography>
+            <ThemeToggleSwitch darkMode={darkMode} setDarkMode={setDarkMode} />
           </Toolbar>
         </AppBar>
 
