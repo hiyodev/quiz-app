@@ -14,6 +14,7 @@ import QuizCard from "./components/Quiz/QuizCard";
 import QuizModal from "./components/Quiz/QuizModal";
 import { useState, createContext, useEffect } from "react";
 import ThemeToggleSwitch from "./components/Buttons/ThemeToggleSwitch";
+import Navbar from "./components/Navbar/Navbar";
 
 export const QuizContext = createContext(null);
 
@@ -57,14 +58,7 @@ function App() {
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <QuizContext.Provider value={{ quizArray, setQuizArray }}>
         <CssBaseline />
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h5" sx={{ flex: 1 }}>
-              QuizApp
-            </Typography>
-            <ThemeToggleSwitch darkMode={darkMode} setDarkMode={setDarkMode} />
-          </Toolbar>
-        </AppBar>
+        <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
         <main>
           <Container maxWidth="sm">
