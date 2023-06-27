@@ -85,7 +85,7 @@ export default function QuizModal(props) {
             timeLimit: false,
             minDuration: 0,
             secDuration: 0,
-            question: "?",
+            question: "",
             explanation: "",
             answerType: "",
             checkboxAns: [
