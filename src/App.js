@@ -5,6 +5,7 @@ import { useState, createContext, useEffect } from "react";
 import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 import HomePage from "./pages/HomePage";
+import StartQuizPage from "./pages/StartQuizPage";
 
 export const QuizContext = createContext(null);
 
@@ -42,7 +43,14 @@ function App() {
           hideThemeToggle={selectedQuiz.started}
           quizTitle={selectedQuiz.started && quizArray[selectedQuiz.id].title}
         />
-        <HomePage setSelectedQuiz={setSelectedQuiz} />
+        {selectedQuiz.started ? (
+          <StartQuizPage
+            quizData={quizArray[selectedQuiz.id]}
+            setSelectedQuiz={setSelectedQuiz}
+          />
+        ) : (
+          <HomePage setSelectedQuiz={setSelectedQuiz} />
+        )}
       </QuizContext.Provider>
     </ThemeProvider>
   );

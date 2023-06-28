@@ -87,7 +87,7 @@ function QuizCard(props) {
           description={description}
         />
         <Button onClick={() => setSelectedQuiz({ started: true, id: id })}>
-          Start
+          Open
         </Button>
       </CardActions>
     </Card>

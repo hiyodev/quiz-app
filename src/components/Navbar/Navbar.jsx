@@ -9,7 +9,7 @@ function Navbar(props) {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h5" sx={{ flex: 1 }}>
-          {quizTitle ? quizTitle : "QuizApp"}
+          {quizTitle ? quizTitle + " Quiz" : "QuizApp"}
         </Typography>
         {!hideThemeToggle && (
           <ThemeToggleSwitch darkMode={darkMode} setDarkMode={setDarkMode} />

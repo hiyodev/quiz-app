@@ -1,12 +1,54 @@
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import React from "react";
 
-// TODO: This will be the content for when user start quizzes
-// Add a progressive timer bar at the top, probably in the Navbar
-// Change the Navbar title to the quiz's card name
-// Remove the theme switch on the right, we don't want users changing theme and being distracted while doing the quiz
-// By default it'll be dark themed.
 function StartQuizPage(props) {
-  return <div></div>;
+  const { quizData, setSelectedQuiz } = props;
+  const { imgUrl, description, tabs } = quizData;
+
+  console.log(quizData);
+
+  return (
+    <main>
+      <Container maxWidth="md">
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          minHeight="90vh"
+          flexDirection="column"
+        >
+          <Typography variant="h4" gutterBottom>
+            Are you ready?
+          </Typography>
+
+          {imgUrl && (
+            <Box
+              component="img"
+              src={imgUrl}
+              sx={{ marginBottom: 2 }}
+              maxWidth="75%"
+            />
+          )}
+          <Typography color="text.secondary" gutterBottom>
+            {description !== undefined && description}
+          </Typography>
+          <Typography>There are {tabs.length} questions in total.</Typography>
+
+          <Stack
+            spacing={2}
+            direction="row"
+            justifyContent="space-between"
+            mt={2}
+          >
+            <Button onClick={() => setSelectedQuiz({ started: false, id: 0 })}>
+              Go Back
+            </Button>
+            <Button variant="contained">Start Quiz</Button>
+          </Stack>
+        </Box>
+      </Container>
+    </main>
+  );
 }
 
 export default StartQuizPage;
