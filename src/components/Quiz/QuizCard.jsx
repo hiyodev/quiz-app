@@ -19,7 +19,7 @@ import QuizModal from "./QuizModal";
 import { QuizContext } from "../../App";
 
 function QuizCard(props) {
-  const { id, imgUrl, title, description } = props;
+  const { id, imgUrl, title, description, setSelectedQuiz } = props;
   const { quizArray, setQuizArray } = useContext(QuizContext);
   const [openDelModal, setOpenDelModal] = useState(false);
 
@@ -86,7 +86,9 @@ function QuizCard(props) {
           title={title}
           description={description}
         />
-        <Button>Start</Button>
+        <Button onClick={() => setSelectedQuiz({ started: true, id: id })}>
+          Start
+        </Button>
       </CardActions>
     </Card>
   );

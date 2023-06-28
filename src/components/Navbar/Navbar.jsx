@@ -3,15 +3,17 @@ import React from "react";
 import ThemeToggleSwitch from "../Buttons/ThemeToggleSwitch";
 
 function Navbar(props) {
-  const { darkMode, setDarkMode } = props;
+  const { darkMode, setDarkMode, hideThemeToggle, quizTitle } = props;
 
   return (
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h5" sx={{ flex: 1 }}>
-          QuizApp
+          {quizTitle ? quizTitle : "QuizApp"}
         </Typography>
-        <ThemeToggleSwitch darkMode={darkMode} setDarkMode={setDarkMode} />
+        {!hideThemeToggle && (
+          <ThemeToggleSwitch darkMode={darkMode} setDarkMode={setDarkMode} />
+        )}
       </Toolbar>
     </AppBar>
   );

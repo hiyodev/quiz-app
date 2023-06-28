@@ -5,6 +5,7 @@ import { QuizContext } from "../App";
 import { useContext } from "react";
 
 function HomePage(props) {
+  const { setSelectedQuiz } = props;
   const { quizArray } = useContext(QuizContext);
 
   const quizCards = quizArray.map((quiz) => {
@@ -16,6 +17,7 @@ function HomePage(props) {
           imgAlt={quiz.imgAlt}
           title={quiz.title}
           description={quiz.description}
+          setSelectedQuiz={setSelectedQuiz}
         ></QuizCard>
       </Grid>
     );

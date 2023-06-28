@@ -22,6 +22,8 @@ const darkTheme = createTheme({
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
+  const [selectedQuiz, setSelectedQuiz] = useState({ started: false, id: 0 });
+
   const [quizArray, setQuizArray] = useState(
     JSON.parse(localStorage.getItem("quizData")) || []
   );
@@ -34,8 +36,13 @@ function App() {
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <QuizContext.Provider value={{ quizArray, setQuizArray }}>
         <CssBaseline />
-        <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
-        <HomePage />
+        <Navbar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          hideThemeToggle={selectedQuiz.started}
+          quizTitle={selectedQuiz.started && quizArray[selectedQuiz.id].title}
+        />
+        <HomePage setSelectedQuiz={setSelectedQuiz} />
       </QuizContext.Provider>
     </ThemeProvider>
   );
