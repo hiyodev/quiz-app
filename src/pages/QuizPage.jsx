@@ -1,5 +1,15 @@
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  Typography,
+  FormGroup,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 import { useState } from "react";
+import AnswerList from "../components/Answers/AnswerList";
 
 function QuizPage(props) {
   const { quizData, setSelectedQuiz } = props;
@@ -26,10 +36,18 @@ function QuizPage(props) {
           justifyContent="center"
           minHeight="90vh"
           flexDirection="column"
+          textAlign="center"
         >
           {startQuiz && qnId !== -1 && (
             <>
-              <Typography variant="h3">{tabs[qnId].question}</Typography>
+              <Typography variant="h3" gutterBottom>
+                {tabs[qnId].question}
+              </Typography>
+              <Typography variant="h6" gutterBottom color="text.secondary">
+                {tabs[qnId].explanation}
+              </Typography>
+              <AnswerList quizData={tabs[qnId]} />
+
               <Stack
                 spacing={2}
                 direction="row"
