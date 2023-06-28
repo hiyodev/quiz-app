@@ -10,12 +10,13 @@ import {
 import React from "react";
 
 function AnswerList(props) {
-  const { answerType, checkboxAns, radioAns, textAns } = props.quizData;
+  const { type, checkbox, radio, text } = props.answers;
+
   return (
     <>
-      {answerType === "checkbox" && (
+      {type === "checkbox" && (
         <FormGroup>
-          {checkboxAns.map((currCheckbox, checkboxIndex) => (
+          {checkbox.map((currCheckbox, checkboxIndex) => (
             <FormControlLabel
               key={checkboxIndex}
               label={currCheckbox.value}
@@ -26,10 +27,10 @@ function AnswerList(props) {
           ))}
         </FormGroup>
       )}
-      {answerType === "radio" && (
+      {type === "radio" && (
         <RadioGroup>
           <FormControl>
-            {radioAns.map((currRadio, radioIndex) => (
+            {radio.map((currRadio, radioIndex) => (
               <FormControlLabel
                 key={radioIndex}
                 value={currRadio.value}
@@ -40,7 +41,7 @@ function AnswerList(props) {
           </FormControl>
         </RadioGroup>
       )}
-      {answerType === "text" && (
+      {type === "text" && (
         <TextField size="small" autoComplete="off"></TextField>
       )}
     </>

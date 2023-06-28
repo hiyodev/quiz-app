@@ -41,7 +41,7 @@ function QuizPage(props) {
               <Typography variant="h6" gutterBottom color="text.secondary">
                 {tabs[qnId].explanation}
               </Typography>
-              <AnswerList quizData={tabs[qnId]} />
+              <AnswerList answers={tabs[qnId].answers} />
 
               <Stack
                 spacing={2}
