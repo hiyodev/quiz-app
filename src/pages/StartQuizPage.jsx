@@ -5,8 +5,6 @@ function StartQuizPage(props) {
   const { quizData, setSelectedQuiz } = props;
   const { imgUrl, description, tabs } = quizData;
 
-  console.log(quizData);
-
   return (
     <main>
       <Container maxWidth="md">
@@ -33,7 +31,6 @@ function StartQuizPage(props) {
             {description !== undefined && description}
           </Typography>
           <Typography>There are {tabs.length} questions in total.</Typography>
-
           <Stack
             spacing={2}
             direction="row"

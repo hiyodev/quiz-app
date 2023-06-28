@@ -1,4 +1,4 @@
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, Fade } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 import { useState, createContext, useEffect } from "react";
@@ -44,10 +44,14 @@ function App() {
           quizTitle={selectedQuiz.started && quizArray[selectedQuiz.id].title}
         />
         {selectedQuiz.started ? (
-          <StartQuizPage
-            quizData={quizArray[selectedQuiz.id]}
-            setSelectedQuiz={setSelectedQuiz}
-          />
+          <Fade in={selectedQuiz.started} style={{ transitionDelay: "50ms" }}>
+            <div>
+              <StartQuizPage
+                quizData={quizArray[selectedQuiz.id]}
+                setSelectedQuiz={setSelectedQuiz}
+              />
+            </div>
+          </Fade>
         ) : (
           <HomePage setSelectedQuiz={setSelectedQuiz} />
         )}
