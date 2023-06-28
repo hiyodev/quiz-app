@@ -5,7 +5,7 @@ import { useState, createContext, useEffect } from "react";
 import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 import HomePage from "./pages/HomePage";
-import StartQuizPage from "./pages/StartQuizPage";
+import QuizPage from "./pages/QuizPage";
 
 export const QuizContext = createContext(null);
 
@@ -46,7 +46,7 @@ function App() {
         {selectedQuiz.started ? (
           <Fade in={selectedQuiz.started} style={{ transitionDelay: "50ms" }}>
             <div>
-              <StartQuizPage
+              <QuizPage
                 quizData={quizArray[selectedQuiz.id]}
                 setSelectedQuiz={setSelectedQuiz}
               />

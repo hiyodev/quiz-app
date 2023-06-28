@@ -1,7 +1,7 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 
-function StartQuizPage(props) {
+function QuizPage(props) {
   const { quizData, setSelectedQuiz } = props;
   const { imgUrl, description, tabs } = quizData;
   const [startQuiz, setStartQuiz] = useState(false);
@@ -90,4 +90,4 @@ function StartQuizPage(props) {
   );
 }
 
-export default StartQuizPage;
+export default QuizPage;
