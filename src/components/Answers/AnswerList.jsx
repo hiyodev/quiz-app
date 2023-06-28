@@ -19,7 +19,9 @@ function AnswerList(props) {
             <FormControlLabel
               key={checkboxIndex}
               label={currCheckbox.value}
-              control={<Checkbox />}
+              control={
+                <Checkbox onChange={() => console.log(currCheckbox.value)} />
+              }
             />
           ))}
         </FormGroup>
@@ -38,7 +40,9 @@ function AnswerList(props) {
           </FormControl>
         </RadioGroup>
       )}
-      {answerType === "text" && <TextField size="small"></TextField>}
+      {answerType === "text" && (
+        <TextField size="small" autoComplete="off"></TextField>
+      )}
     </>
   );
 }

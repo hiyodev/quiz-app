@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  Stack,
-  Typography,
-  FormGroup,
-  Checkbox,
-  FormControlLabel,
-} from "@mui/material";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import AnswerList from "../components/Answers/AnswerList";
 
@@ -16,8 +7,7 @@ function QuizPage(props) {
   const { imgUrl, description, tabs } = quizData;
   const [startQuiz, setStartQuiz] = useState(false);
   const [qnId, setQnId] = useState(0);
-
-  console.log(quizData.tabs[qnId]);
+  const [userAnswers, setUserAnswers] = useState(tabs[qnId]);
 
   const onNextHandler = () => {
     if (qnId < tabs.length - 1) {
@@ -26,6 +16,8 @@ function QuizPage(props) {
       setQnId(-1);
     }
   };
+
+  console.log(tabs[qnId]);
 
   return (
     <main>
@@ -40,6 +32,9 @@ function QuizPage(props) {
         >
           {startQuiz && qnId !== -1 && (
             <>
+              <Typography color="text.secondary" gutterBottom>
+                {`${qnId + 1} / ${tabs.length} Questions`}
+              </Typography>
               <Typography variant="h3" gutterBottom>
                 {tabs[qnId].question}
               </Typography>

@@ -38,8 +38,8 @@ function QuestionTabs(props) {
   const [checkboxChecked, setCheckboxChecked] = useState(false);
 
   const onCheckboxStatusHandler = (currQn) => {
-    for (let i = 0; i < currQn.checkboxAns.length; ++i) {
-      if (currQn.checkboxAns[i].answer) {
+    for (let i = 0; i < currQn.answers.checkbox.length; ++i) {
+      if (currQn.answers.checkbox[i].answer) {
         setCheckboxChecked(true);
         break;
       } else setCheckboxChecked(false);
@@ -54,14 +54,14 @@ function QuestionTabs(props) {
 
   const onAddAnsOptionHandler = (key, index, text) => {
     setQnFormData((prevData) => {
-      prevData[index][key].push({ value: "", answer: false });
+      prevData[index]["answers"][key].push({ value: "", answer: false });
       return [...prevData];
     });
   };
 
   const onDelAnsOptionHandler = (key, index, selectIndex) => {
     setQnFormData((prevData) => {
-      prevData[index][key].splice(selectIndex, 1);
+      prevData[index]["answers"][key].splice(selectIndex, 1);
       return [...prevData];
     });
   };
@@ -78,16 +78,18 @@ function QuestionTabs(props) {
         secDuration: 0,
         question: "",
         explanation: "",
-        answerType: "",
-        checkboxAns: [
-          { value: "A", answer: false },
-          { value: "B", answer: false },
-        ],
-        radioAns: [
-          { value: "True", answer: false },
-          { value: "False", answer: false },
-        ],
-        textAns: [{ value: "", answer: false }],
+        answers: {
+          type: "",
+          checkbox: [
+            { value: "A", answer: false },
+            { value: "B", answer: false },
+          ],
+          radio: [
+            { value: "True", answer: false },
+            { value: "False", answer: false },
+          ],
+          text: [{ value: "", answer: false }],
+        },
       },
     ]);
     setTabValue(newId.toString());
@@ -119,13 +121,22 @@ function QuestionTabs(props) {
     });
   };
 
+  const OnTabAnsChangeHandler = (key, index, value) => {
+    setQnFormData((prevData) => {
+      prevData[index]["answers"][key] = value;
+      return [...prevData];
+    });
+  };
+
   const onAnsSelectHandler = (key, index, selectIndex, selected) => {
     setQnFormData((prevData) => {
-      if (key === "checkboxAns")
-        prevData[index][key][selectIndex].answer = selected;
-      else if (key === "radioAns") {
-        prevData[index][key].map((currRadio) => (currRadio.answer = false));
-        prevData[index][key][selectIndex].answer = selected;
+      if (key === "checkbox")
+        prevData[index]["answers"][key][selectIndex].answer = selected;
+      else if (key === "radio") {
+        prevData[index]["answers"][key].map(
+          (currRadio) => (currRadio.answer = false)
+        );
+        prevData[index]["answers"][key][selectIndex].answer = selected;
       }
       return [...prevData];
     });
@@ -133,7 +144,7 @@ function QuestionTabs(props) {
 
   const onAnsChangeHandler = (key, index, selectIndex, value) => {
     setQnFormData((prevData) => {
-      prevData[index][key][selectIndex].value = value;
+      prevData[index]["answers"][key][selectIndex].value = value;
       return [...prevData];
     });
   };
@@ -273,10 +284,10 @@ function QuestionTabs(props) {
               <Select
                 labelId="simple-select-required-label"
                 id="simple-select-required"
-                value={currQn.answerType}
+                value={currQn.answers.type}
                 label="Answer Type *"
                 onChange={(e) =>
-                  onTabDataChangeHandler("answerType", index, e.target.value)
+                  OnTabAnsChangeHandler("type", index, e.target.value)
                 }
               >
                 <MenuItem value={"text"}>Text (Keyword Matching)</MenuItem>
@@ -286,21 +297,21 @@ function QuestionTabs(props) {
                 </MenuItem>
               </Select>
               <FormHelperText>
-                {currQn.answerType === "" &&
+                {currQn.answers.type === "" &&
                   "Answer fields depend on the type you chose"}
-                {currQn.answerType === "radio" &&
+                {currQn.answers.type === "radio" &&
                   "At least one answer must be selected"}
-                {currQn.answerType === "text" &&
+                {currQn.answers.type === "text" &&
                   "Keywords are NOT case sensitive"}
-                {currQn.answerType === "checkbox" &&
+                {currQn.answers.type === "checkbox" &&
                   "Points gained or lost per answer can be adjusted"}
               </FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            {currQn.answerType === "text" && (
+            {currQn.answers.type === "text" && (
               <>
-                {currQn.textAns.map((currText, textIndex) => (
+                {currQn.answers.text.map((currText, textIndex) => (
                   <Box sx={{ display: "flex" }} key={textIndex}>
                     <TextField
                       size="small"
@@ -312,7 +323,7 @@ function QuestionTabs(props) {
                       value={currText.value}
                       onChange={(e) =>
                         onAnsChangeHandler(
-                          "textAns",
+                          "text",
                           index,
                           textIndex,
                           e.target.value
@@ -325,17 +336,17 @@ function QuestionTabs(props) {
                     {textIndex > 0 && (
                       <Button
                         onClick={() =>
-                          onDelAnsOptionHandler("textAns", index, textIndex)
+                          onDelAnsOptionHandler("text", index, textIndex)
                         }
                       >
                         <Clear />
                       </Button>
                     )}
-                    {textIndex === currQn.textAns.length - 1 && (
+                    {textIndex === currQn.answers.text.length - 1 && (
                       <Button
                         onClick={(e) => {
                           e.preventDefault();
-                          onAddAnsOptionHandler("textAns", index);
+                          onAddAnsOptionHandler("text", index);
                         }}
                         sx={{ marginTop: 0.2 }}
                       >
@@ -346,13 +357,13 @@ function QuestionTabs(props) {
                 ))}
               </>
             )}
-            {currQn.answerType === "radio" && (
+            {currQn.answers.type === "radio" && (
               <RadioGroup>
                 <FormControl>
                   <FormLabel id="controlled-radio-buttons-group">
                     Select the correct answer out of the options
                   </FormLabel>
-                  {currQn.radioAns.map((currRadio, radioIndex) => (
+                  {currQn.answers.radio.map((currRadio, radioIndex) => (
                     <FormControlLabel
                       required
                       sx={{
@@ -367,7 +378,7 @@ function QuestionTabs(props) {
                           checked={currRadio.answer}
                           onChange={(e) =>
                             onAnsSelectHandler(
-                              "radioAns",
+                              "radio",
                               index,
                               radioIndex,
                               e.target.checked
@@ -383,7 +394,7 @@ function QuestionTabs(props) {
                             value={currRadio.value}
                             onChange={(e) =>
                               onAnsChangeHandler(
-                                "radioAns",
+                                "radio",
                                 index,
                                 radioIndex,
                                 e.target.value
@@ -396,7 +407,7 @@ function QuestionTabs(props) {
                             <Button
                               onClick={() =>
                                 onDelAnsOptionHandler(
-                                  "radioAns",
+                                  "radio",
                                   index,
                                   radioIndex
                                 )
@@ -406,11 +417,11 @@ function QuestionTabs(props) {
                               <Clear />
                             </Button>
                           )}
-                          {radioIndex === currQn.radioAns.length - 1 && (
+                          {radioIndex === currQn.answers.radio.length - 1 && (
                             <Button
                               onClick={(e) => {
                                 e.preventDefault();
-                                onAddAnsOptionHandler("radioAns", index);
+                                onAddAnsOptionHandler("radio", index);
                               }}
                               sx={{ marginTop: 0.2 }}
                             >
@@ -424,84 +435,87 @@ function QuestionTabs(props) {
                 </FormControl>
               </RadioGroup>
             )}
-            {currQn.answerType === "checkbox" && (
+            {currQn.answers.type === "checkbox" && (
               <>
                 <FormLabel component="legend">
                   Select one or multiple answers
                 </FormLabel>
                 <FormGroup>
-                  {currQn.checkboxAns.map((currCheckbox, checkboxIndex) => (
-                    <FormControlLabel
-                      sx={{
-                        ".MuiFormControlLabel-asterisk": {
-                          visibility: "hidden",
-                        },
-                      }}
-                      required={!checkboxChecked}
-                      key={checkboxIndex}
-                      control={
-                        <Checkbox
-                          onChange={(e) => {
-                            onAnsSelectHandler(
-                              "checkboxAns",
-                              index,
-                              checkboxIndex,
-                              e.target.checked
-                            );
-
-                            onCheckboxStatusHandler(currQn);
-                          }}
-                          checked={currCheckbox.answer}
-                        />
-                      }
-                      label={
-                        <Box sx={{ display: "flex" }} key={checkboxIndex}>
-                          <TextField
-                            size="small"
-                            autoComplete="off"
-                            value={currCheckbox.value}
-                            onChange={(e) =>
-                              onAnsChangeHandler(
-                                "checkboxAns",
+                  {currQn.answers.checkbox.map(
+                    (currCheckbox, checkboxIndex) => (
+                      <FormControlLabel
+                        sx={{
+                          ".MuiFormControlLabel-asterisk": {
+                            visibility: "hidden",
+                          },
+                        }}
+                        required={!checkboxChecked}
+                        key={checkboxIndex}
+                        control={
+                          <Checkbox
+                            onChange={(e) => {
+                              onAnsSelectHandler(
+                                "checkbox",
                                 index,
                                 checkboxIndex,
-                                e.target.value
-                              )
-                            }
-                            required
-                            sx={{ margin: 0.5 }}
+                                e.target.checked
+                              );
+
+                              onCheckboxStatusHandler(currQn);
+                            }}
+                            checked={currCheckbox.answer}
                           />
-                          {checkboxIndex > 0 && (
-                            <Button
-                              onClick={() => {
-                                onDelAnsOptionHandler(
-                                  "checkboxAns",
+                        }
+                        label={
+                          <Box sx={{ display: "flex" }} key={checkboxIndex}>
+                            <TextField
+                              size="small"
+                              autoComplete="off"
+                              value={currCheckbox.value}
+                              onChange={(e) =>
+                                onAnsChangeHandler(
+                                  "checkbox",
                                   index,
-                                  checkboxIndex
-                                );
-                                onCheckboxStatusHandler(currQn);
-                              }}
-                              sx={{ marginTop: 0.2 }}
-                            >
-                              <Clear />
-                            </Button>
-                          )}
-                          {checkboxIndex === currQn.checkboxAns.length - 1 && (
-                            <Button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                onAddAnsOptionHandler("checkboxAns", index);
-                                onCheckboxStatusHandler(currQn);
-                              }}
-                              sx={{ marginTop: 0.2 }}
-                            >
-                              <AddIcon />
-                            </Button>
-                          )}
-                        </Box>
-                      }
-                    />
-                  ))}
+                                  checkboxIndex,
+                                  e.target.value
+                                )
+                              }
+                              required
+                              sx={{ margin: 0.5 }}
+                            />
+                            {checkboxIndex > 0 && (
+                              <Button
+                                onClick={() => {
+                                  onDelAnsOptionHandler(
+                                    "checkbox",
+                                    index,
+                                    checkboxIndex
+                                  );
+                                  onCheckboxStatusHandler(currQn);
+                                }}
+                                sx={{ marginTop: 0.2 }}
+                              >
+                                <Clear />
+                              </Button>
+                            )}
+                            {checkboxIndex ===
+                              currQn.answers.checkbox.length - 1 && (
+                              <Button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  onAddAnsOptionHandler("checkbox", index);
+                                  onCheckboxStatusHandler(currQn);
+                                }}
+                                sx={{ marginTop: 0.2 }}
+                              >
+                                <AddIcon />
+                              </Button>
+                            )}
+                          </Box>
+                        }
+                      />
+                    )
+                  )}
                 </FormGroup>
               </>
             )}
