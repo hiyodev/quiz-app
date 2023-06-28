@@ -7,9 +7,11 @@ function QuizPage(props) {
   const { imgUrl, description, tabs } = quizData;
   const [startQuiz, setStartQuiz] = useState(false);
   const [qnId, setQnId] = useState(0);
-  const [userAnswers, setUserAnswers] = useState(tabs[qnId]);
+  const [userAnswers, setUserAnswers] = useState([]);
 
   const onNextHandler = () => {
+    const key = tabs[qnId].answers.type;
+    setUserAnswers((currAns) => [...currAns, tabs[qnId].answers[key]]);
     if (qnId < tabs.length - 1) {
       setQnId((prevId) => prevId + 1);
     } else {
@@ -17,7 +19,7 @@ function QuizPage(props) {
     }
   };
 
-  console.log(tabs[qnId]);
+  console.log(userAnswers);
 
   return (
     <main>
@@ -41,7 +43,11 @@ function QuizPage(props) {
               <Typography variant="h6" gutterBottom color="text.secondary">
                 {tabs[qnId].explanation}
               </Typography>
-              <AnswerList answers={tabs[qnId].answers} />
+              <AnswerList
+                answers={tabs[qnId].answers}
+                userAnswers={userAnswers}
+                setUserAnswers={setUserAnswers}
+              />
 
               <Stack
                 spacing={2}

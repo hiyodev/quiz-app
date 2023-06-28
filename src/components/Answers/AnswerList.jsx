@@ -7,21 +7,29 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
-import React from "react";
 
 function AnswerList(props) {
-  const { type, checkbox, radio, text } = props.answers;
+  const { userAnswers, setUserAnswers, answers } = props;
+  const { type, checkbox, radio, text } = answers;
+
+  const onCheckAnswerHandler = (value, index) => {
+    console.log(value, index, answers[type]);
+  };
 
   return (
     <>
       {type === "checkbox" && (
         <FormGroup>
-          {checkbox.map((currCheckbox, checkboxIndex) => (
+          {checkbox.map((currCheckbox, index) => (
             <FormControlLabel
-              key={checkboxIndex}
+              key={index}
               label={currCheckbox.value}
               control={
-                <Checkbox onChange={() => console.log(currCheckbox.value)} />
+                <Checkbox
+                  onChange={() =>
+                    onCheckAnswerHandler(currCheckbox.value, index)
+                  }
+                />
               }
             />
           ))}
@@ -30,12 +38,18 @@ function AnswerList(props) {
       {type === "radio" && (
         <RadioGroup>
           <FormControl>
-            {radio.map((currRadio, radioIndex) => (
+            {radio.map((currRadio, index) => (
               <FormControlLabel
-                key={radioIndex}
+                key={index}
                 value={currRadio.value}
                 label={currRadio.value}
-                control={<Radio />}
+                control={
+                  <Radio
+                    onChange={() =>
+                      onCheckAnswerHandler(currRadio.value, index)
+                    }
+                  />
+                }
               ></FormControlLabel>
             ))}
           </FormControl>
