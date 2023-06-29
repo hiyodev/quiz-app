@@ -88,7 +88,7 @@ function QuestionTabs(props) {
             { value: "True", answer: false },
             { value: "False", answer: false },
           ],
-          text: [{ value: "", answer: false }],
+          text: [{ value: "" }],
         },
       },
     ]);
@@ -138,6 +138,7 @@ function QuestionTabs(props) {
         );
         prevData[index]["answers"][key][selectIndex].answer = selected;
       }
+
       return [...prevData];
     });
   };
