@@ -27,10 +27,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useState, useEffect } from "react";
 
 function QuestionTabs(props) {
-  const { qnFormData, setQnFormData } = props;
-
-  // For tab-switching
-  const [tabValue, setTabValue] = useState("1");
+  const { qnFormData, setQnFormData, tabValue, setTabValue } = props;
 
   const handleTabChange = (event, newValue) => setTabValue(newValue);
 

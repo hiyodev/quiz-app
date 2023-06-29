@@ -46,6 +46,8 @@ export default function QuizModal(props) {
   } = props;
 
   const { quizArray, setQuizArray } = useContext(QuizContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tabValue, setTabValue] = useState("1");
 
   const [qnFormData, setQnFormData] = useState(
     quizCardId !== undefined
@@ -74,7 +76,6 @@ export default function QuizModal(props) {
         ]
   );
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const handleModalState = (state) => {
     // Discard any changes in Modal that is not saved
     if (state === false) {
@@ -110,6 +111,23 @@ export default function QuizModal(props) {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
+
+    let errorFound = false;
+
+    // Validate hidden tab form fields
+    qnFormData.map((tabData) => {
+      // Mandatory fields are empty
+      if (tabData.question.length === 0 || tabData.answers.type.length === 0) {
+        console.log(tabData.id);
+        setTabValue(tabData.id.toString());
+        errorFound = true;
+
+        return;
+      }
+    });
+
+    if (errorFound) return;
+
     const data = new FormData(e.currentTarget);
 
     const inputTitle = data.get("title-field");
@@ -216,11 +234,13 @@ export default function QuizModal(props) {
           <QuestionTabs
             qnFormData={qnFormData}
             setQnFormData={setQnFormData}
+            tabValue={tabValue}
+            setTabValue={setTabValue}
           ></QuestionTabs>
           <Stack
             spacing={2}
             direction="row"
-            mt={4}
+            mt={2}
             display="flex"
             justifyContent="space-between"
           >
