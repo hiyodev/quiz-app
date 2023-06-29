@@ -7,19 +7,25 @@ function QuizPage(props) {
   const { imgUrl, description, tabs } = quizData;
   const [startQuiz, setStartQuiz] = useState(false);
   const [qnId, setQnId] = useState(0);
-  const [userAnswers, setUserAnswers] = useState([]);
+
+  const [userAnswers, setUserAnswers] = useState(() =>
+    JSON.parse(JSON.stringify([tabs[qnId].answers[tabs[qnId].answers.type]]))
+  );
 
   const onNextHandler = () => {
-    const key = tabs[qnId].answers.type;
-    setUserAnswers((currAns) => [...currAns, tabs[qnId].answers[key]]);
     if (qnId < tabs.length - 1) {
+      const key = tabs[qnId + 1].answers.type;
+      setUserAnswers((currAns) => {
+        return [
+          ...currAns,
+          JSON.parse(JSON.stringify(tabs[qnId + 1].answers[key])),
+        ];
+      });
       setQnId((prevId) => prevId + 1);
     } else {
       setQnId(-1);
     }
   };
-
-  console.log(userAnswers);
 
   return (
     <main>
@@ -44,6 +50,7 @@ function QuizPage(props) {
                 {tabs[qnId].explanation}
               </Typography>
               <AnswerList
+                qnId={qnId}
                 answers={tabs[qnId].answers}
                 userAnswers={userAnswers}
                 setUserAnswers={setUserAnswers}

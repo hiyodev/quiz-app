@@ -26,7 +26,7 @@ function App() {
   const [selectedQuiz, setSelectedQuiz] = useState({ started: false, id: 0 });
 
   const [quizArray, setQuizArray] = useState(
-    JSON.parse(localStorage.getItem("quizData")) || []
+    () => JSON.parse(localStorage.getItem("quizData")) || []
   );
 
   useEffect(() => {

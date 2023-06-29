@@ -9,11 +9,17 @@ import {
 } from "@mui/material";
 
 function AnswerList(props) {
-  const { userAnswers, setUserAnswers, answers } = props;
+  const { qnId, userAnswers, setUserAnswers, answers } = props;
   const { type, checkbox, radio, text } = answers;
 
-  const onCheckAnswerHandler = (value, index) => {
-    console.log(value, index, answers[type]);
+  const onCheckAnswerHandler = (value, index, type) => {
+    if (type === "checkbox") {
+      setUserAnswers((userAns) => {
+        userAns[index].selected = value;
+
+        return [...userAns];
+      });
+    }
   };
 
   return (
@@ -26,8 +32,8 @@ function AnswerList(props) {
               label={currCheckbox.value}
               control={
                 <Checkbox
-                  onChange={() =>
-                    onCheckAnswerHandler(currCheckbox.value, index)
+                  onChange={(e) =>
+                    onCheckAnswerHandler(e.target.checked, index, type)
                   }
                 />
               }
@@ -45,8 +51,8 @@ function AnswerList(props) {
                 label={currRadio.value}
                 control={
                   <Radio
-                    onChange={() =>
-                      onCheckAnswerHandler(currRadio.value, index)
+                    onChange={(e) =>
+                      onCheckAnswerHandler(e.target.checked, index, type)
                     }
                   />
                 }
