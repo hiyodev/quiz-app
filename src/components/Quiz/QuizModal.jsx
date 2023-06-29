@@ -126,6 +126,40 @@ export default function QuizModal(props) {
       }
     }
 
+    // Validate hidden tab answer fields
+    if (!errorFound)
+      for (let i = 0; i < qnFormData.length; ++i) {
+        const type = qnFormData[i].answers.type;
+
+        let atLeastOneSelected = false;
+        let optionWithoutValue = false;
+
+        if (type !== "text")
+          for (let j = 0; j < qnFormData[i].answers[type].length; ++j) {
+            if (qnFormData[i].answers[type][j].answer) {
+              atLeastOneSelected = true;
+            }
+            if (qnFormData[i].answers[type][j].value.length === 0) {
+              optionWithoutValue = true;
+              break;
+            }
+          }
+        else {
+          atLeastOneSelected = true; // Disable this check for text options
+          for (let j = 0; j < qnFormData[i].answers.text.length; ++j) {
+            if (qnFormData[i].answers.text[j].value.length === 0) {
+              optionWithoutValue = true;
+              break;
+            }
+          }
+        }
+
+        if (!atLeastOneSelected || optionWithoutValue) {
+          setTabValue(qnFormData[i].id.toString());
+          errorFound = true;
+        }
+      }
+
     if (errorFound) return;
 
     const data = new FormData(e.currentTarget);
