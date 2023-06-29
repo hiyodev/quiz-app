@@ -111,20 +111,20 @@ export default function QuizModal(props) {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-
     let errorFound = false;
 
     // Validate hidden tab form fields
-    qnFormData.map((tabData) => {
-      // Mandatory fields are empty
-      if (tabData.question.length === 0 || tabData.answers.type.length === 0) {
-        console.log(tabData.id);
-        setTabValue(tabData.id.toString());
+    for (let i = 0; i < qnFormData.length; ++i) {
+      if (
+        qnFormData[i].question.length === 0 ||
+        qnFormData[i].answers.type.length === 0
+      ) {
+        setTabValue(qnFormData[i].id.toString());
         errorFound = true;
 
-        return;
+        break;
       }
-    });
+    }
 
     if (errorFound) return;
 
