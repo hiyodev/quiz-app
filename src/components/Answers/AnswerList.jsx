@@ -15,12 +15,21 @@ function AnswerList(props) {
   const onCheckAnswerHandler = (value, index, type) => {
     if (type === "checkbox") {
       setUserAnswers((userAns) => {
-        userAns[index].selected = value;
+        userAns[qnId][index].selected = value;
+
+        return [...userAns];
+      });
+    } else if (type === "radio") {
+      setUserAnswers((userAns) => {
+        userAns[qnId].map((currRadio) => (currRadio.selected = false));
+        userAns[qnId][index].selected = value;
 
         return [...userAns];
       });
     }
   };
+
+  console.log(`DEBUGGING: qnId:${qnId} - userAnswers:`, userAnswers);
 
   return (
     <>
