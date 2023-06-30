@@ -5,7 +5,9 @@ import AnswerList from "../components/Answers/AnswerList";
 function QuizPage(props) {
   const { quizData, setSelectedQuiz } = props;
   const { imgUrl, description, tabs } = quizData;
-  const [startQuiz, setStartQuiz] = useState(false);
+
+  // 3 states: stop, start, end
+  const [quizStatus, setQuizStatus] = useState("stop");
   const [qnId, setQnId] = useState(0);
 
   const [userAnswers, setUserAnswers] = useState(() =>
@@ -23,7 +25,9 @@ function QuizPage(props) {
       });
       setQnId((prevId) => prevId + 1);
     } else {
-      setQnId(-1);
+      console.log("Quiz ended");
+      setQnId(0);
+      setQuizStatus("end");
     }
   };
 
@@ -38,7 +42,12 @@ function QuizPage(props) {
           flexDirection="column"
           textAlign="center"
         >
-          {startQuiz && qnId !== -1 && (
+          {quizStatus === "end" && (
+            <>
+              <h1>End Of Quiz</h1>
+            </>
+          )}
+          {quizStatus === "start" && (
             <>
               <Typography color="text.secondary" gutterBottom>
                 {`${qnId + 1} / ${tabs.length} Questions`}
@@ -73,7 +82,7 @@ function QuizPage(props) {
               </Stack>
             </>
           )}
-          {!startQuiz && (
+          {quizStatus === "stop" && (
             <>
               <Typography variant="h4" gutterBottom>
                 Are you ready?
@@ -104,7 +113,10 @@ function QuizPage(props) {
                 >
                   Go Back
                 </Button>
-                <Button variant="contained" onClick={() => setStartQuiz(true)}>
+                <Button
+                  variant="contained"
+                  onClick={() => setQuizStatus("start")}
+                >
                   Start Quiz
                 </Button>
               </Stack>
