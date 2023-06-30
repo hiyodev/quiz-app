@@ -8,6 +8,7 @@ function QuizPage(props) {
 
   // 3 states: stop, start, end
   const [quizStatus, setQuizStatus] = useState("stop");
+  const [quizScore, setQuizScore] = useState(0);
   const [qnId, setQnId] = useState(0);
 
   const [userAnswers, setUserAnswers] = useState(() =>
@@ -25,9 +26,40 @@ function QuizPage(props) {
       });
       setQnId((prevId) => prevId + 1);
     } else {
-      console.log("Quiz ended");
       setQnId(0);
       setQuizStatus("end");
+
+      let totalScore = 0;
+      let qnScore = 0;
+
+      // Compute total score
+      for (let i = 0; i < userAnswers.length; ++i) {
+        for (let j = 0; j < userAnswers[i].length; ++j) {
+          if ("answer" in userAnswers[i][j]) {
+            // It's checkbox or radio answer
+            if (userAnswers[i][j].answer === userAnswers[i][j].selected) {
+              // Correct answer selected
+              ++qnScore;
+            } else {
+              --qnScore;
+            }
+          } else {
+            // It's a text answer
+            if (userAnswers[i][j].value === userAnswers[i][0].userAns) {
+              ++qnScore;
+              break;
+            }
+          }
+        }
+
+        if (qnScore < 0) qnScore = 0;
+
+        totalScore += qnScore / userAnswers[i].length;
+        console.log("TEST", qnScore, totalScore);
+        qnScore = 0;
+      }
+
+      setQuizScore((totalScore / userAnswers.length) * 100);
     }
   };
 
@@ -44,7 +76,39 @@ function QuizPage(props) {
         >
           {quizStatus === "end" && (
             <>
-              <h1>End Of Quiz</h1>
+              <Typography variant="h4" gutterBottom>
+                Quiz Results
+              </Typography>
+              <Typography variant="h5" gutterBottom>
+                Total Score: {quizScore} / 100
+              </Typography>
+
+              <Typography color="text.secondary" gutterBottom>
+                {quizScore < 50 && "Ooof... Better luck next time!"}
+                {quizScore > 50 && quizScore < 75 && "Good job!"}
+                {quizScore >= 75 &&
+                  quizScore !== 100 &&
+                  "Damn! You're amazing!"}
+                {quizScore === 100 && "You cheated, didn't you?"}
+              </Typography>
+              <Stack
+                spacing={2}
+                direction="row"
+                justifyContent="space-between"
+                mt={2}
+              >
+                <Button
+                  onClick={() => setSelectedQuiz({ started: false, id: 0 })}
+                >
+                  Exit
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => setQuizStatus("review")}
+                >
+                  Review
+                </Button>
+              </Stack>
             </>
           )}
           {quizStatus === "start" && (
