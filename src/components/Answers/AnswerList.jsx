@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 
 function AnswerList(props) {
-  const { qnId, userAnswers, setUserAnswers, answers } = props;
-  const { type, checkbox, radio, text } = answers;
+  const { qnId, userAnswers, setUserAnswers, answers, reviewMode } = props;
+  const { type, checkbox, radio } = answers;
 
   const onCheckAnswerHandler = (value, index, type) => {
     if (type === "checkbox") {
@@ -42,38 +42,85 @@ function AnswerList(props) {
     <>
       {type === "checkbox" && (
         <FormGroup>
-          {checkbox.map((currCheckbox, index) => (
-            <FormControlLabel
-              key={index}
-              label={currCheckbox.value}
-              control={
-                <Checkbox
-                  onChange={(e) =>
-                    onCheckAnswerHandler(e.target.checked, index, type)
-                  }
-                />
-              }
-            />
-          ))}
-        </FormGroup>
-      )}
-      {type === "radio" && (
-        <RadioGroup>
-          <FormControl>
-            {radio.map((currRadio, index) => (
+          {checkbox.map((currCheckbox, index) => {
+            const answerState = currCheckbox.answer == currCheckbox.selected;
+            const selectedState =
+              currCheckbox.selected === undefined
+                ? false
+                : currCheckbox.selected;
+
+            return reviewMode ? (
+              <FormControlLabel
+                checked={reviewMode && selectedState}
+                key={index}
+                label={currCheckbox.value}
+                control={
+                  <Checkbox
+                    sx={{
+                      "&": {
+                        color: currCheckbox.answer ? "green" : "",
+                      },
+                    }}
+                  />
+                }
+              />
+            ) : (
               <FormControlLabel
                 key={index}
-                value={currRadio.value}
-                label={currRadio.value}
+                label={currCheckbox.value}
                 control={
-                  <Radio
+                  <Checkbox
                     onChange={(e) =>
                       onCheckAnswerHandler(e.target.checked, index, type)
                     }
                   />
                 }
-              ></FormControlLabel>
-            ))}
+              />
+            );
+          })}
+        </FormGroup>
+      )}
+      {type === "radio" && (
+        <RadioGroup>
+          <FormControl>
+            {radio.map((currRadio, index) => {
+              const answerState = currRadio.answer == currRadio.selected;
+              const selectedState =
+                currRadio.selected === undefined ? false : currRadio.selected;
+
+              console.log(currRadio);
+
+              return reviewMode ? (
+                <FormControlLabel
+                  checked={reviewMode && selectedState}
+                  key={index}
+                  label={currRadio.value}
+                  control={
+                    <Radio
+                      color={answerState ? "error" : "success"}
+                      sx={{
+                        "&": {
+                          color: currRadio.answer ? "green" : "",
+                        },
+                      }}
+                    />
+                  }
+                />
+              ) : (
+                <FormControlLabel
+                  key={index}
+                  value={currRadio.value}
+                  label={currRadio.value}
+                  control={
+                    <Radio
+                      onChange={(e) =>
+                        onCheckAnswerHandler(e.target.checked, index, type)
+                      }
+                    />
+                  }
+                />
+              );
+            })}
           </FormControl>
         </RadioGroup>
       )}

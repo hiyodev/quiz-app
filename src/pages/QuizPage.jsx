@@ -6,7 +6,7 @@ function QuizPage(props) {
   const { quizData, setSelectedQuiz } = props;
   const { imgUrl, description, tabs } = quizData;
 
-  // 3 states: stop, start, end
+  // 4 states: stop, start, end, review
   const [quizStatus, setQuizStatus] = useState("stop");
   const [quizScore, setQuizScore] = useState(0);
   const [qnId, setQnId] = useState(0);
@@ -18,16 +18,20 @@ function QuizPage(props) {
   const onNextHandler = () => {
     if (qnId < tabs.length - 1) {
       const key = tabs[qnId + 1].answers.type;
-      setUserAnswers((currAns) => {
-        return [
-          ...currAns,
-          JSON.parse(JSON.stringify(tabs[qnId + 1].answers[key])),
-        ];
-      });
+
+      if (quizStatus !== "review")
+        setUserAnswers((currAns) => {
+          return [
+            ...currAns,
+            JSON.parse(JSON.stringify(tabs[qnId + 1].answers[key])),
+          ];
+        });
       setQnId((prevId) => prevId + 1);
     } else {
       setQnId(0);
       setQuizStatus("end");
+
+      if (quizStatus === "review") return;
 
       let totalScore = 0;
       let qnScore = 0;
@@ -55,11 +59,10 @@ function QuizPage(props) {
         if (qnScore < 0) qnScore = 0;
 
         totalScore += qnScore / userAnswers[i].length;
-        console.log("TEST", qnScore, totalScore);
         qnScore = 0;
       }
 
-      setQuizScore((totalScore / userAnswers.length) * 100);
+      setQuizScore(+((totalScore / userAnswers.length) * 100).toFixed(2));
     }
   };
 
@@ -111,7 +114,7 @@ function QuizPage(props) {
               </Stack>
             </>
           )}
-          {quizStatus === "start" && (
+          {(quizStatus === "start" || quizStatus === "review") && (
             <>
               <Typography color="text.secondary" gutterBottom>
                 {`${qnId + 1} / ${tabs.length} Questions`}
@@ -127,6 +130,7 @@ function QuizPage(props) {
                 answers={tabs[qnId].answers}
                 userAnswers={userAnswers}
                 setUserAnswers={setUserAnswers}
+                reviewMode={quizStatus === "review"}
               />
 
               <Stack
