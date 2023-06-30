@@ -43,11 +43,18 @@ function AnswerList(props) {
       {type === "checkbox" && (
         <FormGroup>
           {checkbox.map((currCheckbox, index) => {
-            const answerState = currCheckbox.answer == currCheckbox.selected;
-            const selectedState =
-              currCheckbox.selected === undefined
-                ? false
-                : currCheckbox.selected;
+            let answerState = null;
+            let selectedState = null;
+
+            if (reviewMode) {
+              answerState =
+                userAnswers[qnId][index].answer ===
+                userAnswers[qnId][index].selected;
+              selectedState =
+                userAnswers[qnId][index].selected === undefined
+                  ? false
+                  : userAnswers[qnId][index].selected;
+            }
 
             return reviewMode ? (
               <FormControlLabel
@@ -56,6 +63,7 @@ function AnswerList(props) {
                 label={currCheckbox.value}
                 control={
                   <Checkbox
+                    color={answerState ? "success" : "error"}
                     sx={{
                       "&": {
                         color: currCheckbox.answer ? "green" : "",
@@ -84,11 +92,18 @@ function AnswerList(props) {
         <RadioGroup>
           <FormControl>
             {radio.map((currRadio, index) => {
-              const answerState = currRadio.answer == currRadio.selected;
-              const selectedState =
-                currRadio.selected === undefined ? false : currRadio.selected;
+              let answerState = null;
+              let selectedState = null;
 
-              console.log(currRadio);
+              if (reviewMode) {
+                answerState =
+                  userAnswers[qnId][index].answer ===
+                  userAnswers[qnId][index].selected;
+                selectedState =
+                  userAnswers[qnId][index].selected === undefined
+                    ? false
+                    : userAnswers[qnId][index].selected;
+              }
 
               return reviewMode ? (
                 <FormControlLabel
@@ -97,7 +112,7 @@ function AnswerList(props) {
                   label={currRadio.value}
                   control={
                     <Radio
-                      color={answerState ? "error" : "success"}
+                      color={answerState ? "success" : "error"}
                       sx={{
                         "&": {
                           color: currRadio.answer ? "green" : "",
