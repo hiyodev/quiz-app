@@ -26,6 +26,13 @@ function AnswerList(props) {
 
         return [...userAns];
       });
+    } else {
+      setUserAnswers((userAns) => {
+        userAns[qnId][0].userAns = value;
+        console.log(userAns[qnId][0]);
+
+        return [...userAns];
+      });
     }
   };
 
@@ -71,7 +78,11 @@ function AnswerList(props) {
         </RadioGroup>
       )}
       {type === "text" && (
-        <TextField size="small" autoComplete="off"></TextField>
+        <TextField
+          size="small"
+          autoComplete="off"
+          onChange={(e) => onCheckAnswerHandler(e.target.value, 0, type)}
+        ></TextField>
       )}
     </>
   );
