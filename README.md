@@ -1,13 +1,14 @@
 # Quiz App ( 3 / 25 Apps )
 ### Live Preview
-- Pending
-
+- https://hiyo-quiz.web.app/
+- Hosted using Firebase.
+- 
 # App Summary
-1. Each quiz card can contain any number of customized questions with customized answers.
-2. Pending: Let users write actual code in coding questions and test their code against test cases to verify.
-3. Pending: 
+1. Typical Online Quiz App where you can add your own questions and answers.
+2. Each answer can be "checkbox - multiple answers", "radio - single answer" or "text - multiple keyword matching answers".
+3. Each quiz card can have multiple questions and each question can have multiple answers depending on chosen "answer type".
+4. Responsiveness and theme switch between "light" and "dark" mode thanks to MaterialUI.
 
 #### Why do this?
-1. I wanted a nice and simple way to practice basic knowledge of web development and other programming stuffs.
-2. There are other online quiz making websites available but they are severely lacking in quiz customization.
-3. To get better at FE development.
+1. I wanted a quick and easy way to set up quizzes for myself to revise. There are other better quiz websites available but a lot of them come with tons of fluff.
+2. I also wanted to get familiar with using CSS libraries like MaterialUI and learn how to handle my array of dataset with nested objects.
