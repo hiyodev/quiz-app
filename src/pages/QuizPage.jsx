@@ -58,6 +58,7 @@ function QuizPage(props) {
               --qnScore;
             }
           } else {
+            if (correctAns === 0) correctAns = 1;
             // It's a text answer
             if (
               userAnswers[i][j].value.toLowerCase() ===
@@ -72,7 +73,6 @@ function QuizPage(props) {
         if (qnScore < 0) qnScore = 0;
 
         totalScore += qnScore / correctAns;
-        console.log(qnScore, correctAns);
         qnScore = 0;
       }
 

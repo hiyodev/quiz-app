@@ -35,9 +35,6 @@ function AnswerList(props) {
     }
   };
 
-  console.log(`DEBUGGING: qnId:${qnId} - userAnswers:`, userAnswers);
-  console.log("OriginalAns:", answers);
-
   return (
     <>
       {type === "checkbox" && (
