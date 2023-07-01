@@ -43,48 +43,40 @@ function AnswerList(props) {
       {type === "checkbox" && (
         <FormGroup>
           {checkbox.map((currCheckbox, index) => {
-            let answerState = null;
-            let selectedState = null;
+            const checkboxProps = {
+              key: index,
+              label: currCheckbox.value,
+              ...(reviewMode
+                ? {
+                    checked: reviewMode && !!userAnswers[qnId][index].selected,
+                    control: (
+                      <Checkbox
+                        color={
+                          userAnswers[qnId][index].answer ===
+                          userAnswers[qnId][index].selected
+                            ? "success"
+                            : "error"
+                        }
+                        sx={{
+                          "&": {
+                            color: currCheckbox.answer ? "green" : "",
+                          },
+                        }}
+                      />
+                    ),
+                  }
+                : {
+                    control: (
+                      <Checkbox
+                        onChange={(e) =>
+                          onCheckAnswerHandler(e.target.checked, index, type)
+                        }
+                      />
+                    ),
+                  }),
+            };
 
-            if (reviewMode) {
-              answerState =
-                userAnswers[qnId][index].answer ===
-                userAnswers[qnId][index].selected;
-              selectedState =
-                userAnswers[qnId][index].selected === undefined
-                  ? false
-                  : userAnswers[qnId][index].selected;
-            }
-
-            return reviewMode ? (
-              <FormControlLabel
-                checked={reviewMode && selectedState}
-                key={index}
-                label={currCheckbox.value}
-                control={
-                  <Checkbox
-                    color={answerState ? "success" : "error"}
-                    sx={{
-                      "&": {
-                        color: currCheckbox.answer ? "green" : "",
-                      },
-                    }}
-                  />
-                }
-              />
-            ) : (
-              <FormControlLabel
-                key={index}
-                label={currCheckbox.value}
-                control={
-                  <Checkbox
-                    onChange={(e) =>
-                      onCheckAnswerHandler(e.target.checked, index, type)
-                    }
-                  />
-                }
-              />
-            );
+            return <FormControlLabel {...checkboxProps} />;
           })}
         </FormGroup>
       )}
