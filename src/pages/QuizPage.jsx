@@ -159,7 +159,7 @@ function QuizPage(props) {
                   Quit
                 </Button>
                 <Button variant="contained" onClick={onNextHandler}>
-                  Next
+                  {qnId + 1 === tabs.length ? "Finish" : "Next"}
                 </Button>
               </Stack>
             </>
