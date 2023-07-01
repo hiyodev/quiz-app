@@ -140,7 +140,7 @@ function AnswerList(props) {
             answers.text.some((ans) => {
               return (
                 ans.value.toLowerCase() ===
-                userAnswers[qnId][0].userAns?.toLowerCase()
+                userAnswers[qnId][0].userAns.toLowerCase()
               );
             })
               ? "success"

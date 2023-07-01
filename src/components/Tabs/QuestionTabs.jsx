@@ -51,7 +51,11 @@ function QuestionTabs(props) {
 
   const onAddAnsOptionHandler = (key, index, text) => {
     setQnFormData((prevData) => {
-      prevData[index]["answers"][key].push({ value: "", answer: false });
+      prevData[index]["answers"][key].push({
+        value: "",
+        answer: false,
+        selected: false,
+      });
       return [...prevData];
     });
   };
@@ -78,14 +82,14 @@ function QuestionTabs(props) {
         answers: {
           type: "",
           checkbox: [
-            { value: "A", answer: false },
-            { value: "B", answer: false },
+            { value: "A", answer: false, selected: false },
+            { value: "B", answer: false, selected: false },
           ],
           radio: [
-            { value: "True", answer: false },
-            { value: "False", answer: false },
+            { value: "True", answer: false, selected: false },
+            { value: "False", answer: false, selected: false },
           ],
-          text: [{ value: "" }],
+          text: [{ value: "", userAns: "" }],
         },
       },
     ]);

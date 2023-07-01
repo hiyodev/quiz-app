@@ -38,20 +38,30 @@ function QuizPage(props) {
 
       // Compute total score
       for (let i = 0; i < userAnswers.length; ++i) {
+        let correctAns = 0;
+
         for (let j = 0; j < userAnswers[i].length; ++j) {
           if ("answer" in userAnswers[i][j]) {
+            if (userAnswers[i][j].answer) ++correctAns;
+
             // It's checkbox or radio answer
-            if (userAnswers[i][j].answer === userAnswers[i][j].selected) {
+            if (
+              userAnswers[i][j].answer &&
+              userAnswers[i][j].answer === userAnswers[i][j].selected
+            ) {
               // Correct answer selected
               ++qnScore;
-            } else {
+            } else if (
+              !userAnswers[i][j].answer &&
+              userAnswers[i][j].selected
+            ) {
               --qnScore;
             }
           } else {
             // It's a text answer
             if (
-              userAnswers[i][j].value?.toLowerCase() ===
-              userAnswers[i][0].userAns?.toLowerCase()
+              userAnswers[i][j].value.toLowerCase() ===
+              userAnswers[i][0].userAns.toLowerCase()
             ) {
               ++qnScore;
               break;
@@ -61,7 +71,8 @@ function QuizPage(props) {
 
         if (qnScore < 0) qnScore = 0;
 
-        totalScore += qnScore / userAnswers[i].length;
+        totalScore += qnScore / correctAns;
+        console.log(qnScore, correctAns);
         qnScore = 0;
       }
 
@@ -122,10 +133,10 @@ function QuizPage(props) {
               <Typography color="text.secondary" gutterBottom>
                 {`${qnId + 1} / ${tabs.length} Questions`}
               </Typography>
-              <Typography variant="h3" gutterBottom>
+              <Typography variant="h6" gutterBottom>
                 {tabs[qnId].question}
               </Typography>
-              <Typography variant="h6" gutterBottom color="text.secondary">
+              <Typography gutterBottom color="text.secondary">
                 {tabs[qnId].explanation}
               </Typography>
               <AnswerList

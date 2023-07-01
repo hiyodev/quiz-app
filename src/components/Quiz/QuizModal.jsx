@@ -63,14 +63,14 @@ export default function QuizModal(props) {
             answers: {
               type: "",
               checkbox: [
-                { value: "A", answer: false },
-                { value: "B", answer: false },
+                { value: "A", answer: false, selected: false },
+                { value: "B", answer: false, selected: false },
               ],
               radio: [
-                { value: "True", answer: false },
-                { value: "False", answer: false },
+                { value: "True", answer: false, selected: false },
+                { value: "False", answer: false, selected: false },
               ],
-              text: [{ value: "" }],
+              text: [{ value: "", userAns: "" }],
             },
           },
         ]
@@ -93,14 +93,14 @@ export default function QuizModal(props) {
             answers: {
               type: "",
               checkbox: [
-                { value: "A", answer: false },
-                { value: "B", answer: false },
+                { value: "A", answer: false, selected: false },
+                { value: "B", answer: false, selected: false },
               ],
               radio: [
-                { value: "True", answer: false },
-                { value: "False", answer: false },
+                { value: "True", answer: false, selected: false },
+                { value: "False", answer: false, selected: false },
               ],
-              text: [{ value: "" }],
+              text: [{ value: "", userAns: "" }],
             },
           },
         ]);
