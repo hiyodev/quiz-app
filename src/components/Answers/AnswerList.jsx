@@ -92,49 +92,42 @@ function AnswerList(props) {
         <RadioGroup>
           <FormControl>
             {radio.map((currRadio, index) => {
-              let answerState = null;
-              let selectedState = null;
+              const radioProps = {
+                key: index,
+                label: currRadio.value,
+                value: currRadio.value,
+                ...(reviewMode
+                  ? {
+                      checked:
+                        reviewMode && !!userAnswers[qnId][index].selected,
+                      control: (
+                        <Radio
+                          color={
+                            userAnswers[qnId][index].answer ===
+                            userAnswers[qnId][index].selected
+                              ? "success"
+                              : "error"
+                          }
+                          sx={{
+                            "&": {
+                              color: currRadio.answer ? "green" : "",
+                            },
+                          }}
+                        />
+                      ),
+                    }
+                  : {
+                      control: (
+                        <Radio
+                          onChange={(e) =>
+                            onCheckAnswerHandler(e.target.checked, index, type)
+                          }
+                        />
+                      ),
+                    }),
+              };
 
-              if (reviewMode) {
-                answerState =
-                  userAnswers[qnId][index].answer ===
-                  userAnswers[qnId][index].selected;
-                selectedState =
-                  userAnswers[qnId][index].selected === undefined
-                    ? false
-                    : userAnswers[qnId][index].selected;
-              }
-
-              return reviewMode ? (
-                <FormControlLabel
-                  checked={reviewMode && selectedState}
-                  key={index}
-                  label={currRadio.value}
-                  control={
-                    <Radio
-                      color={answerState ? "success" : "error"}
-                      sx={{
-                        "&": {
-                          color: currRadio.answer ? "green" : "",
-                        },
-                      }}
-                    />
-                  }
-                />
-              ) : (
-                <FormControlLabel
-                  key={index}
-                  value={currRadio.value}
-                  label={currRadio.value}
-                  control={
-                    <Radio
-                      onChange={(e) =>
-                        onCheckAnswerHandler(e.target.checked, index, type)
-                      }
-                    />
-                  }
-                />
-              );
+              return <FormControlLabel {...radioProps} />;
             })}
           </FormControl>
         </RadioGroup>
