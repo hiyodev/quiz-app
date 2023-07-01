@@ -17,8 +17,6 @@ import {
   FormGroup,
   Checkbox,
   RadioGroup,
-  Switch,
-  Typography,
 } from "@mui/material";
 import { TabList, TabPanel, TabContext } from "@mui/lab";
 import { Clear } from "@mui/icons-material";
@@ -74,9 +72,6 @@ function QuestionTabs(props) {
       ...qnFormData,
       {
         id: newId,
-        timeLimit: false,
-        minDuration: 0,
-        secDuration: 0,
         question: "",
         explanation: "",
         answers: {
@@ -187,69 +182,6 @@ function QuestionTabs(props) {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={currQn.timeLimit}
-                    onChange={(e) =>
-                      onTabDataChangeHandler(
-                        "timeLimit",
-                        index,
-                        e.target.checked
-                      )
-                    }
-                  />
-                }
-                label={
-                  currQn.timeLimit ? (
-                    <Box sx={{ display: "flex" }} columnGap={1}>
-                      <TextField
-                        margin="dense"
-                        size="small"
-                        type="number"
-                        label="minutes"
-                        value={currQn.minDuration}
-                        onChange={(e) =>
-                          onTabDataChangeHandler(
-                            "minDuration",
-                            index,
-                            e.target.value < 0 ? 0 : e.target.value
-                          )
-                        }
-                      ></TextField>
-                      <TextField
-                        margin="dense"
-                        size="small"
-                        type="number"
-                        label="seconds"
-                        value={currQn.secDuration}
-                        onChange={(e) =>
-                          onTabDataChangeHandler(
-                            "secDuration",
-                            index,
-                            e.target.value < 0 ? 0 : e.target.value
-                          )
-                        }
-                      ></TextField>
-                    </Box>
-                  ) : (
-                    <Typography color={"text.secondary"}>
-                      No Time Limits
-                    </Typography>
-                  )
-                }
-                sx={{
-                  paddingTop: 1,
-                  width: "100%",
-                  "@media (min-width: 600px)": {
-                    width: "65%",
-                  },
-                }}
-              />
-            </FormGroup>
-          </Grid>
-          <Grid item xs={12}>
             <TextField
               id="qns-field"
               name="qns-field"
@@ -262,6 +194,7 @@ function QuestionTabs(props) {
               }
               required
               fullWidth
+              sx={{ mt: 2 }}
             />
           </Grid>
           <Grid item xs={12}>

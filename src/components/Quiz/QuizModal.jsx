@@ -55,9 +55,6 @@ export default function QuizModal(props) {
       : [
           {
             id: 1,
-            timeLimit: false,
-            minDuration: 0,
-            secDuration: 0,
             question: "",
             explanation: "",
             answers: {
@@ -85,9 +82,6 @@ export default function QuizModal(props) {
         setQnFormData([
           {
             id: 1,
-            timeLimit: false,
-            minDuration: 0,
-            secDuration: 0,
             question: "",
             explanation: "",
             answers: {
@@ -213,7 +207,10 @@ export default function QuizModal(props) {
       </Button>
       <Modal
         open={isModalOpen}
-        onClose={() => handleModalState(false)}
+        onClose={() => {
+          setTabValue("1");
+          handleModalState(false);
+        }}
         aria-labelledby="modal-modal-title"
       >
         <Box component="form" sx={style} onSubmit={onSubmitHandler}>
