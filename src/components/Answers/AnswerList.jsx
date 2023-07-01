@@ -29,7 +29,6 @@ function AnswerList(props) {
     } else {
       setUserAnswers((userAns) => {
         userAns[qnId][0].userAns = value;
-        console.log(userAns[qnId][0]);
 
         return [...userAns];
       });
@@ -37,6 +36,7 @@ function AnswerList(props) {
   };
 
   console.log(`DEBUGGING: qnId:${qnId} - userAnswers:`, userAnswers);
+  console.log("OriginalAns:", answers);
 
   return (
     <>
@@ -124,12 +124,31 @@ function AnswerList(props) {
           </FormControl>
         </RadioGroup>
       )}
-      {type === "text" && (
+      {type === "text" && !reviewMode && (
         <TextField
           size="small"
           autoComplete="off"
           onChange={(e) => onCheckAnswerHandler(e.target.value, 0, type)}
-        ></TextField>
+        />
+      )}
+      {type === "text" && reviewMode && (
+        <TextField
+          size="small"
+          autoComplete="off"
+          value={userAnswers[qnId][0].userAns}
+          color={
+            answers.text.some((ans) => {
+              return (
+                ans.value.toLowerCase() ===
+                userAnswers[qnId][0].userAns?.toLowerCase()
+              );
+            })
+              ? "success"
+              : "error"
+          }
+          focused
+          InputProps={{ readOnly: true }}
+        />
       )}
     </>
   );

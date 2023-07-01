@@ -49,7 +49,10 @@ function QuizPage(props) {
             }
           } else {
             // It's a text answer
-            if (userAnswers[i][j].value === userAnswers[i][0].userAns) {
+            if (
+              userAnswers[i][j].value?.toLowerCase() ===
+              userAnswers[i][0].userAns?.toLowerCase()
+            ) {
               ++qnScore;
               break;
             }

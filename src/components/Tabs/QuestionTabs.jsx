@@ -324,7 +324,7 @@ function QuestionTabs(props) {
                           "text",
                           index,
                           textIndex,
-                          e.target.value
+                          e.target.value.replace(/\s/g, "")
                         )
                       }
                       required
