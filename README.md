@@ -2,7 +2,7 @@
 ### Live Preview
 - https://hiyo-quiz.web.app/
 - Hosted using Firebase.
-- 
+
 # App Summary
 1. Typical Online Quiz App where you can add your own questions and answers.
 2. Each answer can be "checkbox - multiple answers", "radio - single answer" or "text - multiple keyword matching answers".
